@@ -1,0 +1,193 @@
+body {
+    background-color: #0a0a0a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Central elements */
+.center-box {
+    width: 300px;
+    height: 300px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    background: linear-gradient(135deg, rgba(0, 150, 255, 0.1), rgba(150, 0, 255, 0.1));
+}
+
+.center-ring {
+    width: 400px;
+    height: 400px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+}
+
+.center-core {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+}
+
+/* Corner brackets */
+.corner-bracket {
+    width: 80px;
+    height: 80px;
+    border: 2px solid white;
+}
+
+.corner-bracket.tl {
+    border-right: none;
+    border-bottom: none;
+}
+
+.corner-bracket.tr {
+    border-left: none;
+    border-bottom: none;
+}
+
+.corner-bracket.bl {
+    border-right: none;
+    border-top: none;
+}
+
+.corner-bracket.br {
+    border-left: none;
+    border-top: none;
+}
+
+/* Corner dots */
+.corner-dot {
+    width: 12px;
+    height: 12px;
+    background: #00d4ff;
+    box-shadow: 0 0 10px #00d4ff;
+}
+
+/* Edge lines */
+.edge-line {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.edge-line.top {
+    width: 400px;
+    height: 1px;
+}
+
+.edge-line.bottom {
+    width: 400px;
+    height: 1px;
+}
+
+.edge-line.left {
+    width: 1px;
+    height: 400px;
+}
+
+.edge-line.right {
+    width: 1px;
+    height: 400px;
+}
+
+/* Text elements */
+.label-text {
+    font-family: "Courier New", monospace;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.label-text.vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+/* Data blocks */
+.data-block {
+    font-family: "Courier New", monospace;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.data-title {
+    font-size: 12px;
+    color: #00d4ff;
+    margin-bottom: 5px;
+    letter-spacing: 2px;
+}
+
+.data-content {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Progress bars */
+.progress-container {
+    width: 300px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #00d4ff, #7b2ff7);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+/* Accent elements */
+.accent-box {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #00d4ff;
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.accent-line {
+    height: 2px;
+    background: #7b2ff7;
+    box-shadow: 0 0 5px #7b2ff7;
+}
+
+#accline1 {
+    width: 150px;
+}
+
+#accline2 {
+    width: 150px;
+}
+
+/* Additional fill elements */
+.small-box {
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.thin-line {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.thin-line.horizontal {
+    width: 100px;
+    height: 1px;
+}
+
+.thin-line.vertical {
+    width: 1px;
+    height: 100px;
+}
+
+.micro-text {
+    font-family: "Courier New", monospace;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 1px;
+}

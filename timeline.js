@@ -1,0 +1,201 @@
+import { Animation, animationLoop, ease } from "./animation.js";
+
+export class Timeline {
+    constructor() {
+        this.animations = [];
+    }
+
+    anim(target) {
+        let startTime = 0;
+        let duration = 0;
+        let spline = ease.linear;
+        let type = [];
+
+        const timeline = this;
+
+        return {
+            // required
+            at(time) {
+                startTime = time;
+                return this;
+            },
+
+            // required, but not for place() and set()
+            for(dur) {
+                duration = dur;
+                return this;
+            },
+
+            // optional, default is linear
+            spline(s) {
+                spline = s;
+                return this;
+            },
+
+            // required, can be array or string
+            type(t) {
+                type = t;
+                return this;
+            },
+
+            then() {
+                startTime += duration;
+                return this;
+            },
+
+            // instant place x,y
+            place(x, y) {
+                timeline.animations.push({
+                    target: target,
+                    type: "translateX",
+                    startValue: x,
+                    endValue: x,
+                    startTime: startTime,
+                    duration: 1,
+                });
+                timeline.animations.push({
+                    target: target,
+                    type: "translateY",
+                    startValue: y,
+                    endValue: y,
+                    startTime: startTime,
+                    duration: 1,
+                });
+                return this;
+            },
+
+            // set instantly, repeating for each animation type
+            set(val) {
+                if (!Array.isArray(type)) {
+                    timeline.animations.push({
+                        target: target,
+                        type: type,
+                        startValue: val,
+                        endValue: val,
+                        startTime: startTime,
+                        duration: 1,
+                    });
+                } else {
+                    for (const t of type) {
+                        timeline.animations.push({
+                            target: target,
+                            type: t,
+                            startValue: val,
+                            endValue: val,
+                            startTime: startTime,
+                            duration: 1,
+                        });
+                    }
+                }
+                return this;
+            },
+
+            // move from start to end, repeating for each animation type
+            move(start, end) {
+                if (!Array.isArray(type)) {
+                    timeline.animations.push({
+                        target: target,
+                        type: type,
+                        startValue: start,
+                        endValue: end,
+                        startTime: startTime,
+                        duration: duration,
+                        spline: spline,
+                    });
+                } else {
+                    for (const t of type) {
+                        timeline.animations.push({
+                            target: target,
+                            type: t,
+                            startValue: start,
+                            endValue: end,
+                            startTime: startTime,
+                            duration: duration,
+                            spline: spline,
+                        });
+                    }
+                }
+                return this;
+            },
+
+            // move from current to end, repeating for each type
+            moveTo(end) {
+                if (!Array.isArray(type)) {
+                    timeline.animations.push({
+                        target,
+                        type,
+                        startValue: null,
+                        endValue: end,
+                        startTime: startTime,
+                        duration: duration,
+                        spline: spline,
+                        state: "moveTo",
+                    });
+                } else {
+                    for (const t of type) {
+                        timeline.animations.push({
+                            target,
+                            type: t,
+                            startValue: null,
+                            endValue: end,
+                            startTime: startTime,
+                            duration: duration,
+                            spline: spline,
+                            state: "moveTo",
+                        });
+                    }
+                }
+                return this;
+            },
+
+            // move from current by delta, repeating for each type
+            moveBy(delta) {
+                if (!Array.isArray(type)) {
+                    timeline.animations.push({
+                        target,
+                        type,
+                        startValue: null,
+                        endValue: delta,
+                        startTime: startTime,
+                        duration: duration,
+                        spline: spline,
+                        state: "moveBy",
+                    });
+                } else {
+                    for (const t of type) {
+                        timeline.animations.push({
+                            target,
+                            type: t,
+                            startValue: null,
+                            endValue: delta,
+                            startTime: startTime,
+                            duration: duration,
+                            spline: spline,
+                            state: "moveBy",
+                        });
+                    }
+                }
+                return this;
+            },
+        };
+    }
+
+    play() {
+        const start = performance.now();
+
+        for (const animation of this.animations) {
+            new Animation(
+                animation.target,
+                animation.type,
+                animation.startValue,
+                animation.endValue,
+                animation.startTime + start,
+                animation.duration,
+                animation.spline,
+                animation.state
+            );
+        }
+
+        requestAnimationFrame(animationLoop);
+    }
+}

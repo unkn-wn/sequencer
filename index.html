@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>JS Animation Testbed</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <timeline-canvas width="1920" height="1080" border="true">
+            <!-- Central focal elements -->
+            <div class="center-box"></div>
+            <div class="center-ring"></div>
+            <div class="center-core"></div>
+
+            <!-- Corner brackets -->
+            <div class="corner-bracket tl"></div>
+            <div class="corner-bracket tr"></div>
+            <div class="corner-bracket bl"></div>
+            <div class="corner-bracket br"></div>
+
+            <!-- Corner accents -->
+            <div class="corner-dot tl"></div>
+            <div class="corner-dot tr"></div>
+            <div class="corner-dot bl"></div>
+            <div class="corner-dot br"></div>
+
+            <!-- Edge lines -->
+            <div class="edge-line top"></div>
+            <div class="edge-line bottom"></div>
+            <div class="edge-line left"></div>
+            <div class="edge-line right"></div>
+
+            <!-- Text elements -->
+            <div class="label-text" id="label1">SYSTEM</div>
+            <div class="label-text" id="label2">INITIALIZE</div>
+            <div class="label-text vertical" id="label3">SEQUENCE</div>
+            <div class="label-text vertical" id="label4">PROTOCOL</div>
+
+            <!-- Data blocks -->
+            <div class="data-block" id="data1">
+                <div class="data-title">STATUS</div>
+                <div class="data-content">ACTIVE</div>
+            </div>
+            <div class="data-block" id="data2">
+                <div class="data-title">COORD</div>
+                <div class="data-content">X:960 Y:540</div>
+            </div>
+
+            <!-- Progress bars -->
+            <div class="progress-container" id="prog1">
+                <div class="progress-bar"></div>
+            </div>
+            <div class="progress-container" id="prog2">
+                <div class="progress-bar"></div>
+            </div>
+
+            <!-- Accent elements -->
+            <div class="accent-box" id="acc1"></div>
+            <div class="accent-box" id="acc2"></div>
+            <div class="accent-line" id="accline1"></div>
+            <div class="accent-line" id="accline2"></div>
+
+            <!-- Additional fill elements -->
+            <div class="small-box" id="sb1"></div>
+            <div class="small-box" id="sb2"></div>
+            <div class="small-box" id="sb3"></div>
+            <div class="small-box" id="sb4"></div>
+
+            <div class="thin-line horizontal" id="tl1"></div>
+            <div class="thin-line horizontal" id="tl2"></div>
+            <div class="thin-line vertical" id="tl3"></div>
+            <div class="thin-line vertical" id="tl4"></div>
+
+            <div class="micro-text" id="mt1">0x4A2F</div>
+            <div class="micro-text" id="mt2">0x8B3C</div>
+            <div class="micro-text" id="mt3">0xD1E9</div>
+            <div class="micro-text" id="mt4">0x5F7A</div>
+        </timeline-canvas>
+        <script type="module" src="main.js"></script>
+    </body>
+</html>
