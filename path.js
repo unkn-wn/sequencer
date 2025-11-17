@@ -35,7 +35,7 @@ export class Path {
 
 	startAt(x, y) {
 		this.startPoint = new Point(x, y);
-        return this;
+		return this;
 	}
 
 	curveTo(cp1x, cp1y, cp2x, cp2y, xEnd, yEnd) {
@@ -46,7 +46,7 @@ export class Path {
 			cp2: new Point(cp2x, cp2y),
 			end: new Point(xEnd, yEnd),
 		});
-        return this;
+		return this;
 	}
 
 	cubicBezier(t, p1, cp1, cp2, p2) {
