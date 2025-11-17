@@ -1,4 +1,5 @@
 import { Animation, animationLoop, ease } from "./animation.js";
+import { Path } from "./path.js";
 
 export class Timeline {
     constructor() {
@@ -10,6 +11,7 @@ export class Timeline {
         let duration = 0;
         let spline = ease.linear;
         let type = [];
+        let path = null;
 
         const timeline = this;
 
@@ -177,6 +179,23 @@ export class Timeline {
                 }
                 return this;
             },
+
+            // SEND TO PATH case
+            path(path) {
+                timeline.animations.push({
+                    target: target,
+                    type: "path",
+                    startValue: null,
+                    endValue: path,
+                    startTime: startTime,
+                    duration: duration,
+                    spline: spline,
+                    path: path,
+                });
+
+                console.log(path);
+                return this;
+            }
         };
     }
 
@@ -192,7 +211,8 @@ export class Timeline {
                 animation.startTime + start,
                 animation.duration,
                 animation.spline,
-                animation.state
+                animation.state,
+                animation.path,
             );
         }
 

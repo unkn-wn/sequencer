@@ -55,7 +55,7 @@ const mapping = {
 };
 
 export class Animation {
-    constructor(target, type, startValue, endValue, startTime, duration, spline = ease.linear, moveType = null) {
+    constructor(target, type, startValue, endValue, startTime, duration, spline = ease.linear, moveType = null, path = null) {
         this.target = target;
         this.type = type;
 
@@ -67,6 +67,8 @@ export class Animation {
         this.spline = spline; // size 2 array of bezier curve control points. (0,0) and (1,1) are implicit endpoints.
 
         this.moveType = moveType; // moveTo or moveBy
+
+        this.path = path; // for path animations
 
         animations.push(this);
     }
@@ -134,8 +136,13 @@ export function animationLoop(currentTime) {
         const progress = Math.min(1, elapsed / animation.duration);
 
         const value = bezierEase(progress, animation.spline);
-        const currentValue = animation.startValue + (animation.endValue - animation.startValue) * value;
-
+        
+        let currentValue;
+        if (animation.type === "path") {
+            currentValue = animation.path.calculatePosition(value);
+        } else {
+            currentValue = animation.startValue + (animation.endValue - animation.startValue) * value;
+        }
         const state = getState(animation.target);
         setState(state, animation.type, currentValue);
         applyState(animation.target, state);
@@ -168,6 +175,10 @@ export function setState(state, type, value) {
             break;
         case "rotate":
             state.rotation = value;
+            break;
+        case "path":
+            state.x = value.x;
+            state.y = value.y;
             break;
     }
 }

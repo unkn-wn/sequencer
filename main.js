@@ -480,4 +480,14 @@ timeline
     .type("scale")
     .move(1.4, 1);
 
+import { Path } from "./path.js";
+const path = new Path()
+    .startAt(-695.0, 170.5)
+    .curveTo(-506.0, 117.5, 268.0, 24.5, 553.0, 89.5)
+    .curveTo(838.0, 154.5, 871.0, 335.5, 571.0, 408.5)
+    .curveTo(271.0, 481.5, 9.0, 319.5, -37.0, 185.5);
+
+timeline.anim(centerCore).at(1500).for(1000).spline(ease.smoothL).path(path);
+
+
 timeline.play();
