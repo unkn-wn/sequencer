@@ -487,6 +487,6 @@ const path = new Path()
 	.curveTo(838.0, 154.5, 871.0, 335.5, 571.0, 408.5)
 	.curveTo(271.0, 481.5, 9.0, 319.5, -37.0, 185.5);
 
-timeline.anim(centerCore).at(1500).for(1000).spline(ease.smoothL).path(path);
+timeline.anim(centerCore).at(1500).for(1000).spline(ease.linear).path(path);
 
 timeline.play();

@@ -1,7 +1,4 @@
 class Point {
-	x;
-	y;
-
 	constructor(x, y) {
 		this.x = x;
 		this.y = y;
@@ -41,7 +38,7 @@ export class Path {
 	curveTo(cp1x, cp1y, cp2x, cp2y, xEnd, yEnd) {
 		const start = this.segments.length === 0 ? this.startPoint : this.segments[this.segments.length - 1].end;
 		this.segments.push({
-			start: new Point(start.x, start.y),
+			start: start,
 			cp1: new Point(cp1x, cp1y),
 			cp2: new Point(cp2x, cp2y),
 			end: new Point(xEnd, yEnd),
@@ -50,8 +47,8 @@ export class Path {
 	}
 
 	cubicBezier(t, p1, cp1, cp2, p2) {
-		const x = (1 - t) ** 3 * p1.x + 3 * (1 - t) ** 2 * cp1.x + 3 * (1 - t) * t ** 2 * cp2.x + t ** 3 * p2.x;
-		const y = (1 - t) ** 3 * p1.y + 3 * (1 - t) ** 2 * cp1.y + 3 * (1 - t) * t ** 2 * cp2.y + t ** 3 * p2.y;
+		const x = (1 - t) ** 3 * p1.x + 3 * (1 - t) ** 2 * t * cp1.x + 3 * (1 - t) * t ** 2 * cp2.x + t ** 3 * p2.x;
+		const y = (1 - t) ** 3 * p1.y + 3 * (1 - t) ** 2 * t * cp1.y + 3 * (1 - t) * t ** 2 * cp2.y + t ** 3 * p2.y;
 		return new Point(x, y);
 	}
 
