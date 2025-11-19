@@ -22,10 +22,6 @@ export class Point {
 
 		return this.y;
 	}
-
-	clone() {
-		return new Point(this.x, this.y);
-	}
 }
 
 export class Path {

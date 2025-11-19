@@ -147,8 +147,7 @@ function createCSS() {
 }
 
 function createCanvas() {
-	const canvas = document.createElement('svg');
-	canvas.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+	const canvas = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 	canvas.id = 'sequencer-path-editor-canvas';
 	canvas.style.position = 'fixed';
 	canvas.style.top = '0';
@@ -176,6 +175,7 @@ function createEventListeners() {
 		if (isDrawing) {
 			beginButton.textContent = 'Stop';
 			beginButton.classList.add('active');
+			canvas.style.cursor = 'crosshair';
 			canvas.style.pointerEvents = 'auto';
 		} else {
 			beginButton.textContent = 'Edit';
