@@ -140,7 +140,6 @@ export function animationLoop(currentTime) {
 		let currentValue;
 		if (animation.type === 'path') {
 			currentValue = animation.path.calculatePosition(value);
-			console.log(currentValue);
 		} else {
 			currentValue = animation.startValue + (animation.endValue - animation.startValue) * value;
 		}

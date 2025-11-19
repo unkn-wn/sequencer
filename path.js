@@ -1,4 +1,4 @@
-class Point {
+export class Point {
 	constructor(x, y) {
 		this.x = x;
 		this.y = y;
@@ -21,6 +21,10 @@ class Point {
 		}
 
 		return this.y;
+	}
+
+	clone() {
+		return new Point(this.x, this.y);
 	}
 }
 

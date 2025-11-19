@@ -193,7 +193,6 @@ export class Timeline {
 					path: path,
 				});
 
-				console.log(path);
 				return this;
 			},
 		};

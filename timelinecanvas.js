@@ -1,4 +1,6 @@
 export class TimelineCanvas extends HTMLElement {
+	scale;
+
 	constructor() {
 		super();
 
@@ -12,7 +14,6 @@ export class TimelineCanvas extends HTMLElement {
 		this.style.height = this.height + 'px';
 
 		this.style.position = 'absolute';
-
 		this.style.overflow = 'hidden';
 
 		this.resize = this.resize.bind(this);
@@ -42,7 +43,8 @@ export class TimelineCanvas extends HTMLElement {
 
 		const scaleX = screenX / this.width;
 		const scaleY = screenY / this.height;
-		const scale = Math.min(scaleX, scaleY);
+		const scale = Math.min(scaleX, scaleY) - 0.005;
+		this.scale = scale;
 
 		this.style.transform = `scale(${scale})`;
 	}
