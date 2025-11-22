@@ -22,6 +22,22 @@ export class Point {
 
 		return this.y;
 	}
+
+	offsetTo(otherPoint) {
+		const dx = this.x - otherPoint.x;
+		const dy = this.y - otherPoint.y;
+		return { dx, dy };
+	}
+
+	subtract(otherPoint) {
+		return new Point(this.x - otherPoint.x, this.y - otherPoint.y);
+	}
+
+	normalize() {
+		const length = Math.sqrt(this.x * this.x + this.y * this.y);
+		
+		return new Point(this.x / length, this.y / length);
+	}
 }
 
 export class Path {
@@ -54,7 +70,8 @@ export class Path {
 
 	calculatePosition(t) {
 		// set global T based on num of segments, so the current segment is t (ex. 0.5) * num segments (ex 6) = 3 (globalT)
-		// local T is now globalT (3) - segment index (3) = 0. so we are at start of segment, since we subtraced the floor
+		// local T is now globalT (3) - segment index (3) = 0. so we are at start of segment, since we subtracted the floor
+		// now that we know which segment and the local T for that segment, calculate bezier point
 		const globalT = t * this.segments.length;
 		const i = Math.min(Math.floor(globalT), this.segments.length - 1);
 		const localT = globalT - i;

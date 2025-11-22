@@ -8,6 +8,9 @@ const timelineCanvas = document.querySelector('timeline-canvas');
 const points = [];
 let isDrawing = false;
 
+let draggedElement = null;
+let dragOffset = null;
+
 export function injectEditor() {
 	createHTML();
 	createCanvas();
@@ -190,15 +193,16 @@ function createEventListeners() {
 	});
 
 	canvas.addEventListener('mousedown', (e) => {
+		if (e.button !== 0) return;
 		onMouseDown(e);
 	});
 
 	canvas.addEventListener('mousemove', (e) => {
-		// move point
+		onMouseMove(e);
 	});
 
 	canvas.addEventListener('mouseup', (e) => {
-		// release point
+		onMouseUp(e);
 	});
 
 	document.addEventListener('keydown', (e) => {
@@ -211,23 +215,77 @@ function redraw() {
 	const canvas = document.getElementById('sequencer-path-editor-canvas');
 	canvas.innerHTML = '';
 
+	if (points.length === 0) return;
+
 	for (let i = 0; i < points.length; i++) {
 		const point = points[i];
+
+		const handle1Line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+		handle1Line.classList.add('sequencer-handle-line');
+		handle1Line.setAttribute('x1', point.anchor.x);
+		handle1Line.setAttribute('y1', point.anchor.y);
+		handle1Line.setAttribute('x2', point.cp1.x);
+		handle1Line.setAttribute('y2', point.cp1.y);
+		canvas.appendChild(handle1Line);
+
+		const handle2Line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+		handle2Line.classList.add('sequencer-handle-line');
+		handle2Line.setAttribute('x1', point.anchor.x);
+		handle2Line.setAttribute('y1', point.anchor.y);
+		handle2Line.setAttribute('x2', point.cp2.x);
+		handle2Line.setAttribute('y2', point.cp2.y);
+		canvas.appendChild(handle2Line);
+
+		// anchor
 		const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 		circle.classList.add('sequencer-anchor-point');
 		circle.setAttribute('cx', point.anchor.x);
 		circle.setAttribute('cy', point.anchor.y);
-		circle.setAttribute('r', 6);
+		circle.setAttribute('r', 8);
 		circle.dataset.index = i;
+		circle.dataset.type = 'anchor';
 		canvas.appendChild(circle);
+
+		const control1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+		control1.classList.add('sequencer-control-point');
+		control1.setAttribute('cx', point.cp1.x);
+		control1.setAttribute('cy', point.cp1.y);
+		control1.setAttribute('r', 6);
+		control1.dataset.index = i;
+		control1.dataset.type = 'control1';
+		canvas.appendChild(control1);
+
+		const control2 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+		control2.classList.add('sequencer-control-point');
+		control2.setAttribute('cx', point.cp2.x);
+		control2.setAttribute('cy', point.cp2.y);
+		control2.setAttribute('r', 6);
+		control2.dataset.index = i;
+		control2.dataset.type = 'control2';
+		canvas.appendChild(control2);
 	}
+
+	// 1. Draw the main path
+	// If there's more than one point:
+	//   - Create an SVG <path> element.
+	//   - Build the 'd' attribute string:
+	//     - Start with "M" (moveto) for the first point's anchor.
+	//     - For each subsequent point, add a "C" (curveto) segment.
+	//     - The "C" command needs 3 coordinates:
+	//       - The previous point's second control point (control2).
+	//       - The current point's first control point (control1).
+	//       - The current point's anchor.
+	//   - Set the 'd' attribute on the path element.
+	//   - Append the path element to the canvas.
+
+	updateOutput();
 }
 
-function getTimelineCoordinates(e) {
+function getTimelineCoordinates(point) {
 	const rect = timelineCanvas.getBoundingClientRect();
 
-	const x = (e.clientX - rect.left - rect.width / 2) / timelineCanvas.scale;
-	const y = (e.clientY - rect.top - rect.height / 2) / timelineCanvas.scale;
+	const x = (point.x - rect.left - rect.width / 2) / timelineCanvas.scale;
+	const y = (point.y - rect.top - rect.height / 2) / timelineCanvas.scale;
 
 	return new Point(x, y);
 }
@@ -235,11 +293,112 @@ function getTimelineCoordinates(e) {
 function onMouseDown(e) {
 	if (!isDrawing) return;
 
-	const canvasPoint = new Point(e.clientX, e.clientY);
-	const timelinePoint = getTimelineCoordinates(e);
-	points.push({ anchor: canvasPoint, timelinePoints: timelinePoint, cp1: null, cp2: null });
-	redraw();
-	console.log('Added point at:', canvasPoint.x, canvasPoint.y);
-
 	const target = e.target;
+	if (target.dataset.type === 'anchor' || target.dataset.type === 'control1' || target.dataset.type === 'control2') {
+		draggedElement = target;
+
+		const mousePoint = new Point(e.clientX, e.clientY);
+		const anchorPoint = points[parseInt(draggedElement.dataset.index)];
+
+		if (draggedElement.dataset.type === 'anchor') {
+			dragOffset = mousePoint.offsetTo(anchorPoint.anchor);
+		} else if (draggedElement.dataset.type === 'control1') {
+			dragOffset = mousePoint.offsetTo(anchorPoint.cp1);
+		} else if (draggedElement.dataset.type === 'control2') {
+			dragOffset = mousePoint.offsetTo(anchorPoint.cp2);
+		}
+	} else {
+		const canvasPoint = new Point(e.clientX, e.clientY);
+
+		const handleDistance = 50;
+		const cp1 = new Point(canvasPoint.x - handleDistance, canvasPoint.y);
+		const cp2 = new Point(canvasPoint.x + handleDistance, canvasPoint.y);
+
+		if (points.length > 0) {
+			const lastPoint = points[points.length - 1];
+
+			const directionVector = canvasPoint.subtract(lastPoint.anchor).normalize();
+
+			cp1.x = canvasPoint.x - directionVector.x * handleDistance;
+			cp1.y = canvasPoint.y - directionVector.y * handleDistance;
+
+			cp2.x = canvasPoint.x + directionVector.x * handleDistance;
+			cp2.y = canvasPoint.y + directionVector.y * handleDistance;
+		}
+		points.push({ anchor: canvasPoint, cp1: cp1, cp2: cp2 });
+	}
+
+	redraw();
+}
+
+function onMouseMove(e) {
+	if (!draggedElement) return;
+
+	const mousePoint = new Point(e.clientX, e.clientY);
+	const i = parseInt(draggedElement.dataset.index);
+	const anchorPoint = points[i];
+
+	const newX = mousePoint.x - dragOffset.dx;
+	const newY = mousePoint.y - dragOffset.dy;
+
+	if (draggedElement.dataset.type === 'anchor') {
+		anchorPoint.cp1.x += newX - anchorPoint.anchor.x;
+		anchorPoint.cp1.y += newY - anchorPoint.anchor.y;
+
+		anchorPoint.cp2.x += newX - anchorPoint.anchor.x;
+		anchorPoint.cp2.y += newY - anchorPoint.anchor.y;
+
+		anchorPoint.anchor.x = newX;
+		anchorPoint.anchor.y = newY;
+	} else if (draggedElement.dataset.type === 'control1') {
+		anchorPoint.cp1.x = newX;
+		anchorPoint.cp1.y = newY;
+
+		if (!e.shiftKey) {
+			anchorPoint.cp2.x = anchorPoint.anchor.x - (newX - anchorPoint.anchor.x);
+			anchorPoint.cp2.y = anchorPoint.anchor.y - (newY - anchorPoint.anchor.y);
+		}
+	} else if (draggedElement.dataset.type === 'control2') {
+		anchorPoint.cp2.x = newX;
+		anchorPoint.cp2.y = newY;
+
+		if (!e.shiftKey) {
+			anchorPoint.cp1.x = anchorPoint.anchor.x - (newX - anchorPoint.anchor.x);
+			anchorPoint.cp1.y = anchorPoint.anchor.y - (newY - anchorPoint.anchor.y);
+		}
+	}
+
+	points[i] = anchorPoint;
+
+	redraw();
+}
+
+function onMouseUp(e) {
+	if (draggedElement) draggedElement = null;
+}
+
+function updateOutput() {
+	if (points.length === 0) {
+		return;
+	}
+
+	const output = document.getElementById('sequencer-path-output');
+	let outputString = '';
+
+	const firstPoint = points[0];
+	const timelineAnchor = getTimelineCoordinates(firstPoint.anchor);
+	outputString += `const path = new Path()\n\t.startAt(${timelineAnchor.x.toFixed(4)}, ${timelineAnchor.y.toFixed(4)})`;
+
+	//cp1x, cp1y, cp2x, cp2y, xEnd, yEnd
+	for (let i = 0; i < points.length; i++) {
+		if (i === 0) continue;
+		const curTimelineCP1 = getTimelineCoordinates(points[i].cp1);
+		const prevTimelineCP2 = getTimelineCoordinates(points[i - 1].cp2);
+		const curTimelineAnchor = getTimelineCoordinates(points[i].anchor);
+
+		outputString += `\n\t.curveTo(${prevTimelineCP2.x.toFixed(4)}, ${prevTimelineCP2.y.toFixed(4)}, `;
+		outputString += `${curTimelineCP1.x.toFixed(4)}, ${curTimelineCP1.y.toFixed(4)}, `;
+		outputString += `${curTimelineAnchor.x.toFixed(4)}, ${curTimelineAnchor.y.toFixed(4)})`;
+	}
+	output.value = outputString + ';';
 }

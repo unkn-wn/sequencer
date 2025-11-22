@@ -484,10 +484,9 @@ timeline
 
 import { Path } from './path.js';
 const path = new Path()
-	.startAt(-695.0, 170.5)
-	.curveTo(-506.0, 117.5, 268.0, 24.5, 553.0, 89.5)
-	.curveTo(838.0, 154.5, 871.0, 335.5, 571.0, 408.5)
-	.curveTo(271.0, 481.5, 9.0, 319.5, -37.0, 185.5);
+	.startAt(-411.5183, -322.7749)
+	.curveTo(-325.1309, -360.4712, 350.3813, -358.5199, 413.0890, -277.2251)
+	.curveTo(475.7967, -195.9303, 65.7960, 232.0489, -50.2618, 225.3927);
 
 timeline.anim(centerCore).at(1500).for(1000).spline(ease.linear).path(path);
 
