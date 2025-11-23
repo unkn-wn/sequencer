@@ -484,10 +484,11 @@ timeline
 
 import { Path } from './path.js';
 const path = new Path()
-	.startAt(-411.5183, -322.7749)
-	.curveTo(-325.1309, -360.4712, 350.3813, -358.5199, 413.0890, -277.2251)
-	.curveTo(475.7967, -195.9303, 65.7960, 232.0489, -50.2618, 225.3927);
+	.startAt(199.4764, -208.1152)
+	.curveTo(285.8639, -10.2094, 412.468, -200.0047, 449.2147, -65.1832)
+	.curveTo(485.9613, 69.6382, 553.6393, 407.2358, 232.4607, 150.0)
+	.curveTo(-88.7178, -107.2358, -325.8861, -183.1142, -475.9162, 51.0471);
 
-timeline.anim(centerCore).at(1500).for(1000).spline(ease.linear).path(path);
+timeline.anim(centerCore).at(1500).for(1000).spline(ease.smoothL).path(path);
 
 timeline.play();

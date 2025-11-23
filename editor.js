@@ -5,7 +5,7 @@
 import { Path, Point } from './path.js';
 
 const timelineCanvas = document.querySelector('timeline-canvas');
-const points = [];
+let points = [];
 let isDrawing = false;
 
 let draggedElement = null;
@@ -16,6 +16,8 @@ export function injectEditor() {
 	createCanvas();
 	createCSS();
 	createEventListeners();
+
+	addStateToHistory();
 }
 
 function createHTML() {
@@ -206,7 +208,7 @@ function createEventListeners() {
 	});
 
 	document.addEventListener('keydown', (e) => {
-		// detect undo for later
+		onKeyDown(e);
 	});
 }
 
@@ -215,7 +217,25 @@ function redraw() {
 	const canvas = document.getElementById('sequencer-path-editor-canvas');
 	canvas.innerHTML = '';
 
-	if (points.length === 0) return;
+	if (points.length === 0) {
+		updateOutput();
+		return;
+	}
+
+	if (points.length > 1) {
+		const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+		path.classList.add('sequencer-main-path');
+
+		let d = `M ${points[0].anchor.x} ${points[0].anchor.y} `;
+		for (let i = 1; i < points.length; i++) {
+			d += `C ${points[i - 1].cp2.x} ${points[i - 1].cp2.y}, `;
+			d += `${points[i].cp1.x} ${points[i].cp1.y}, `;
+			d += `${points[i].anchor.x} ${points[i].anchor.y} `;
+		}
+
+		path.setAttribute('d', d);
+		canvas.appendChild(path);
+	}
 
 	for (let i = 0; i < points.length; i++) {
 		const point = points[i];
@@ -264,19 +284,6 @@ function redraw() {
 		control2.dataset.type = 'control2';
 		canvas.appendChild(control2);
 	}
-
-	// 1. Draw the main path
-	// If there's more than one point:
-	//   - Create an SVG <path> element.
-	//   - Build the 'd' attribute string:
-	//     - Start with "M" (moveto) for the first point's anchor.
-	//     - For each subsequent point, add a "C" (curveto) segment.
-	//     - The "C" command needs 3 coordinates:
-	//       - The previous point's second control point (control2).
-	//       - The current point's first control point (control1).
-	//       - The current point's anchor.
-	//   - Set the 'd' attribute on the path element.
-	//   - Append the path element to the canvas.
 
 	updateOutput();
 }
@@ -375,14 +382,18 @@ function onMouseMove(e) {
 
 function onMouseUp(e) {
 	if (draggedElement) draggedElement = null;
+
+	addStateToHistory();
 }
 
 function updateOutput() {
+	const output = document.getElementById('sequencer-path-output');
+
 	if (points.length === 0) {
+		output.value = '';
 		return;
 	}
 
-	const output = document.getElementById('sequencer-path-output');
 	let outputString = '';
 
 	const firstPoint = points[0];
@@ -401,4 +412,50 @@ function updateOutput() {
 		outputString += `${curTimelineAnchor.x.toFixed(4)}, ${curTimelineAnchor.y.toFixed(4)})`;
 	}
 	output.value = outputString + ';';
+}
+
+// --- HISTORY MANAGEMENT --------------
+
+const history = [];
+let historyIndex = -1;
+
+function onKeyDown(e) {
+	if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.code === 'KeyZ') {
+		e.preventDefault();
+		redo();
+	} else if ((e.ctrlKey || e.metaKey) && e.code === 'KeyZ') {
+		e.preventDefault();
+		undo();
+	}
+}
+
+function undo() {
+	if (historyIndex == 0) return;
+	historyIndex--;
+	const historicalState = history[historyIndex];
+	points = JSON.parse(JSON.stringify(historicalState)).map((p) => ({
+		anchor: new Point(p.anchor.x, p.anchor.y),
+		cp1: new Point(p.cp1.x, p.cp1.y),
+		cp2: new Point(p.cp2.x, p.cp2.y),
+	}));
+	redraw();
+}
+
+function redo() {
+	if (historyIndex >= history.length - 1) return;
+	historyIndex++;
+	const historicalState = history[historyIndex];
+	points = JSON.parse(JSON.stringify(historicalState)).map((p) => ({
+		anchor: new Point(p.anchor.x, p.anchor.y),
+		cp1: new Point(p.cp1.x, p.cp1.y),
+		cp2: new Point(p.cp2.x, p.cp2.y),
+	}));
+	redraw();
+}
+
+function addStateToHistory() {
+	history.splice(historyIndex + 1);
+	const state = JSON.parse(JSON.stringify(points));
+	history.push(state);
+	historyIndex++;
 }
