@@ -228,13 +228,16 @@ function bezierEaseY(progress, spline) {
 }
 
 function bezierEase(progress, spline) {
+	if (progress <= 0) return 0;
+	if (progress >= 1) return 1;
+
 	// binary search?
 	let low = 0,
 		high = 1,
 		t = progress;
-	for (let i = 0; i < 10; i++) {
+	for (let i = 0; i < 12; i++) {
 		const x = bezierEaseX(t, spline);
-		if (Math.abs(x - progress) < 0.001) break;
+		if (Math.abs(x - progress) < 0.0001) break;
 
 		if (x < progress) low = t;
 		else high = t;
