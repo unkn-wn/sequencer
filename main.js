@@ -16,10 +16,7 @@ const sparks = document.querySelectorAll('.spark');
 const bars = document.querySelectorAll('.bar');
 
 // --- Define Paths ---
-const orbPath = new Path()
-	.startAt(0, -300)
-	.curveTo(400, -300, 400, 300, 0, 300)
-	.curveTo(-400, 300, -400, -300, 0, -300);
+const orbPath = new Path().startAt(0, -300).curveTo(400, -300, 400, 300, 0, 300).curveTo(-400, 300, -400, -300, 0, -300);
 
 const sparkPath1 = new Path().startAt(0, 0).curveTo(100, 0, 300, -400, 600, -500);
 const sparkPath2 = new Path().startAt(0, 0).curveTo(-100, 0, -300, 400, -600, 500);
@@ -30,6 +27,16 @@ const sparkPaths = [sparkPath1, sparkPath2, sparkPath1, sparkPath2, sparkPath1, 
 	timeline.anim(el).at(0).type('opacity').set(0);
 	timeline.anim(el).at(0).type('scale').set(0);
 });
+
+// --- Background Animation ---
+timeline.background().at(0).set('#02040a'); // Set initial color
+// Glitchy flashes during the spark burst
+timeline.background().at(2000).set('#a7dcff');
+timeline.background().at(2050).set('#02040a');
+timeline.background().at(2100).set('#a7dcff');
+timeline.background().at(2150).set('#02040a');
+// Slow fade to purple during the collapse
+timeline.background().at(4000).for(1000).spline(ease.smooth).fade('#02040a', '#1a0229');
 
 // --- Animation Sequence (5 seconds) ---
 
@@ -54,7 +61,13 @@ bars.forEach((bar, i) => {
 	timeline.anim(bar).at(0).place(startX, startY);
 	timeline.anim(bar).at(0).type('rotate').set(angle);
 
-	timeline.anim(bar).at(1500 + i * 50).for(500).spline(ease.expOut).type(['scale', 'opacity']).move(0, 1);
+	timeline
+		.anim(bar)
+		.at(1500 + i * 50)
+		.for(500)
+		.spline(ease.expOut)
+		.type(['scale', 'opacity'])
+		.move(0, 1);
 	timeline.anim(bar).at(2000).for(1000).spline(ease.smooth).type('rotate').moveBy(90);
 	timeline.anim(bar).at(4000).for(500).spline(ease.expIn).type(['translateX', 'translateY']).moveTo(0);
 	timeline.anim(bar).at(4500).for(200).type('opacity').moveTo(0);

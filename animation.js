@@ -70,6 +70,11 @@ export class Animation {
 
 		this.path = path; // for path animations
 
+		if (type === 'color') {
+			this.colorStart = parseColor(this.startValue);
+			this.colorEnd = parseColor(this.endValue);
+		}
+
 		animations.push(this);
 	}
 }
@@ -91,6 +96,12 @@ export function getState(element) {
 }
 
 export function applyState(element, state) {
+	if (state.color) {
+		// if color change, only modify color
+		element.style.backgroundColor = `rgba(${state.color.r}, ${state.color.g}, ${state.color.b}, ${state.color.a})`;
+		return;
+	}
+
 	const css = `translate(-50%, -50%) translateX(${state.x}px) translateY(${state.y}px) scale(${state.scale}) scaleX(${state.scaleX}) scaleY(${state.scaleY}) rotate(${state.rotation}deg)`;
 	element.style.transform = css;
 	element.style.opacity = state.opacity;
@@ -125,9 +136,12 @@ export function animationLoop(currentTime) {
 
 		if (currentTime < animation.startTime) continue;
 
+		////////////// move type ///////// //////////////////
 		if (animation.moveType === 'moveTo') {
 			animation.startValue = getState(animation.target)[mapping[animation.type]];
-		} else if (animation.moveType === 'moveBy') {
+		}
+
+		if (animation.moveType === 'moveBy') {
 			animation.startValue = getState(animation.target)[mapping[animation.type]];
 			animation.endValue = animation.startValue + animation.endValue;
 		}
@@ -137,12 +151,26 @@ export function animationLoop(currentTime) {
 
 		const value = bezierEase(progress, animation.spline);
 
+		// set the value for diff animation types ///////////////////
 		let currentValue;
-		if (animation.type === 'path') {
-			currentValue = animation.path.calculatePosition(value);
-		} else {
-			currentValue = animation.startValue + (animation.endValue - animation.startValue) * value;
+		switch (animation.type) {
+			case 'path':
+				currentValue = animation.path.calculatePosition(value);
+				break;
+			case 'color':
+				currentValue = {
+					r: animation.colorStart.r + (animation.colorEnd.r - animation.colorStart.r) * value,
+					g: animation.colorStart.g + (animation.colorEnd.g - animation.colorStart.g) * value,
+					b: animation.colorStart.b + (animation.colorEnd.b - animation.colorStart.b) * value,
+					a: animation.colorStart.a + (animation.colorEnd.a - animation.colorStart.a) * value,
+				};
+				break;
+			default:
+				currentValue = animation.startValue + (animation.endValue - animation.startValue) * value;
+				break;
 		}
+
+		// apply values
 		const state = getState(animation.target);
 		setState(state, animation.type, currentValue);
 		applyState(animation.target, state);
@@ -179,6 +207,14 @@ export function setState(state, type, value) {
 		case 'path':
 			state.x = value.x;
 			state.y = value.y;
+			break;
+		case 'color':
+			state.color = {
+				r: Math.round(value.r),
+				g: Math.round(value.g),
+				b: Math.round(value.b),
+				a: value.a,
+			};
 			break;
 	}
 }
@@ -246,4 +282,45 @@ function bezierEase(progress, spline) {
 	}
 
 	return bezierEaseY(t, spline);
+}
+
+// coloring functions for bg and element colors
+function parseColor(col) {
+	const rgba = { r: 0, g: 0, b: 0, a: 1 };
+
+	if (typeof col === 'string' && col.startsWith('#')) {
+		// hex color string
+		if (col.length === 7) {
+			rgba.r = parseInt(col.slice(1, 3), 16);
+			rgba.g = parseInt(col.slice(3, 5), 16);
+			rgba.b = parseInt(col.slice(5, 7), 16);
+		}
+		// short hex color string
+		else if (col.length === 4) {
+			rgba.r = parseInt(col.charAt(1) + col.charAt(1), 16);
+			rgba.g = parseInt(col.charAt(2) + col.charAt(2), 16);
+			rgba.b = parseInt(col.charAt(3) + col.charAt(3), 16);
+		}
+	}
+
+	if (typeof col === 'string' && col.startsWith('rgb')) {
+		// rgb or rgba string
+		const vals = col
+			.match(/rgba?\(([^)]+)\)/)[1]
+			.split(',')
+			.map((v) => v.trim());
+		rgba.r = parseInt(vals[0]);
+		rgba.g = parseInt(vals[1]);
+		rgba.b = parseInt(vals[2]);
+		rgba.a = vals.length === 4 ? parseFloat(vals[3]) : 1;
+	}
+
+	if (Array.isArray(col)) {
+		rgba.r = col[0];
+		rgba.g = col[1];
+		rgba.b = col[2];
+		rgba.a = col.length === 4 ? col[3] : 1;
+	}
+
+	return rgba;
 }

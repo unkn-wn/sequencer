@@ -11,7 +11,6 @@ export class Timeline {
 		let duration = 0;
 		let spline = ease.linear;
 		let type = [];
-		let path = null;
 
 		const timeline = this;
 
@@ -193,6 +192,60 @@ export class Timeline {
 					path: path,
 				});
 
+				return this;
+			},
+		};
+	}
+
+	background() {
+		const timeline = this;
+
+		const target = document.querySelector('timeline-canvas');
+
+		let startTime = 0;
+		let duration = 0;
+		let spline = ease.linear;
+
+		return {
+			at(time) {
+				startTime = time;
+				return this;
+			},
+
+			// optional, only need for fade
+			for(dur) {
+				duration = dur;
+				return this;
+			},
+
+			spline(s) {
+				spline = s;
+				return this;
+			},
+
+			// either hex as string or rgb array
+			set(color) {
+				timeline.animations.push({
+					target: target,
+					type: 'color',
+					startValue: color,
+					endValue: color,
+					startTime: startTime,
+					duration: 1,
+				});
+				return this;
+			},
+
+			fade(fromColor, toColor) {
+				timeline.animations.push({
+					target: target,
+					type: 'color',
+					startValue: fromColor,
+					endValue: toColor,
+					startTime: startTime,
+					duration: duration,
+					spline: spline,
+				});
 				return this;
 			},
 		};
