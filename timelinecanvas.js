@@ -4,6 +4,8 @@ export class TimelineCanvas extends HTMLElement {
 	constructor() {
 		super();
 
+		this.setAttribute('id', 'sequencer-timeline-canvas');
+
 		this.width = this.getAttribute('width') || 500;
 		this.height = this.getAttribute('height') || 500;
 

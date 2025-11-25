@@ -96,8 +96,7 @@ export function getState(element) {
 }
 
 export function applyState(element, state) {
-	if (state.color) {
-		// if color change, only modify color
+	if (element.id === 'sequencer-timeline-canvas') {
 		element.style.backgroundColor = `rgba(${state.color.r}, ${state.color.g}, ${state.color.b}, ${state.color.a})`;
 		return;
 	}
@@ -105,6 +104,9 @@ export function applyState(element, state) {
 	const css = `translate(-50%, -50%) translateX(${state.x}px) translateY(${state.y}px) scale(${state.scale}) scaleX(${state.scaleX}) scaleY(${state.scaleY}) rotate(${state.rotation}deg)`;
 	element.style.transform = css;
 	element.style.opacity = state.opacity;
+	if (state.color) {
+		element.style.backgroundColor = `rgba(${state.color.r}, ${state.color.g}, ${state.color.b}, ${state.color.a})`;
+	}
 }
 
 // function animate(options) {
@@ -137,11 +139,11 @@ export function animationLoop(currentTime) {
 		if (currentTime < animation.startTime) continue;
 
 		////////////// move type ///////// //////////////////
-		if (animation.moveType === 'moveTo') {
+		if (animation.moveType === 'to') {
 			animation.startValue = getState(animation.target)[mapping[animation.type]];
 		}
 
-		if (animation.moveType === 'moveBy') {
+		if (animation.moveType === 'by') {
 			animation.startValue = getState(animation.target)[mapping[animation.type]];
 			animation.endValue = animation.startValue + animation.endValue;
 		}

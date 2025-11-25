@@ -38,6 +38,7 @@ body {
 	background: radial-gradient(circle, #fff, #00aaff);
 	border-radius: 50%;
 	box-shadow: 0 0 10px #fff, 0 0 30px #00aaff;
+	background-color: #00aaff; /* Initial color */
 }
 
 .spark {
@@ -46,6 +47,7 @@ body {
 	background: #fff;
 	border-radius: 50%;
 	box-shadow: 0 0 5px #fff, 0 0 15px #fff;
+	background-color: #fff; /* Initial color */
 }
 
 .bar {

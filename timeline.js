@@ -35,7 +35,12 @@ export class Timeline {
 
 			// required, can be array or string
 			type(t) {
-				type = t;
+				if (Array.isArray(t)) {
+					type = t;
+				} else {
+					type = [];
+					type.push(t);
+				}
 				return this;
 			},
 
@@ -67,114 +72,65 @@ export class Timeline {
 
 			// set instantly, repeating for each animation type
 			set(val) {
-				if (!Array.isArray(type)) {
+				for (const t of type) {
 					timeline.animations.push({
 						target: target,
-						type: type,
+						type: t,
 						startValue: val,
 						endValue: val,
 						startTime: startTime,
 						duration: 1,
 					});
-				} else {
-					for (const t of type) {
-						timeline.animations.push({
-							target: target,
-							type: t,
-							startValue: val,
-							endValue: val,
-							startTime: startTime,
-							duration: 1,
-						});
-					}
 				}
 				return this;
 			},
 
 			// move from start to end, repeating for each animation type
-			move(start, end) {
-				if (!Array.isArray(type)) {
+			fromTo(start, end) {
+				for (const t of type) {
 					timeline.animations.push({
 						target: target,
-						type: type,
+						type: t,
 						startValue: start,
 						endValue: end,
 						startTime: startTime,
 						duration: duration,
 						spline: spline,
 					});
-				} else {
-					for (const t of type) {
-						timeline.animations.push({
-							target: target,
-							type: t,
-							startValue: start,
-							endValue: end,
-							startTime: startTime,
-							duration: duration,
-							spline: spline,
-						});
-					}
 				}
 				return this;
 			},
 
 			// move from current to end, repeating for each type
-			moveTo(end) {
-				if (!Array.isArray(type)) {
+			to(end) {
+				for (const t of type) {
 					timeline.animations.push({
 						target,
-						type,
+						type: t,
 						startValue: null,
 						endValue: end,
 						startTime: startTime,
 						duration: duration,
 						spline: spline,
-						state: 'moveTo',
+						state: 'to',
 					});
-				} else {
-					for (const t of type) {
-						timeline.animations.push({
-							target,
-							type: t,
-							startValue: null,
-							endValue: end,
-							startTime: startTime,
-							duration: duration,
-							spline: spline,
-							state: 'moveTo',
-						});
-					}
 				}
 				return this;
 			},
 
 			// move from current by delta, repeating for each type
-			moveBy(delta) {
-				if (!Array.isArray(type)) {
+			by(delta) {
+				for (const t of type) {
 					timeline.animations.push({
 						target,
-						type,
+						type: t,
 						startValue: null,
 						endValue: delta,
 						startTime: startTime,
 						duration: duration,
 						spline: spline,
-						state: 'moveBy',
+						state: 'by',
 					});
-				} else {
-					for (const t of type) {
-						timeline.animations.push({
-							target,
-							type: t,
-							startValue: null,
-							endValue: delta,
-							startTime: startTime,
-							duration: duration,
-							spline: spline,
-							state: 'moveBy',
-						});
-					}
 				}
 				return this;
 			},

@@ -41,17 +41,21 @@ timeline.background().at(4000).for(1000).spline(ease.smooth).fade('#02040a', '#1
 // --- Animation Sequence (5 seconds) ---
 
 // 0ms: Core build-up
-timeline.anim(coreSquare).at(100).for(800).spline(ease.overshoot).type(['scale', 'opacity']).move(0, 1);
-timeline.anim(coreSquare).at(100).for(5000).type('rotate').move(0, 360);
+timeline.anim(coreSquare).at(100).for(800).spline(ease.overshoot).type(['scale', 'opacity']).fromTo(0, 1);
+timeline.anim(coreSquare).at(100).for(5000).type('rotate').fromTo(0, 360);
+// Add color fade for core-square
+// timeline.anim(coreSquare).at(1000).for(2000).spline(ease.smooth).type('color').fromTo('#a7dcff', '#ff00c8');
 
 // 500ms: Rings expand
-timeline.anim(ring1).at(500).for(1000).spline(ease.expOut).type(['scale', 'opacity']).move(0.5, 1);
-timeline.anim(ring2).at(600).for(1200).spline(ease.expOut).type(['scale', 'opacity']).move(0.5, 1);
-timeline.anim(ring2).at(600).for(4400).type('rotate').move(0, -90);
+timeline.anim(ring1).at(500).for(1000).spline(ease.expOut).type(['scale', 'opacity']).fromTo(0.5, 1);
+timeline.anim(ring2).at(600).for(1200).spline(ease.expOut).type(['scale', 'opacity']).fromTo(0.5, 1);
+timeline.anim(ring2).at(600).for(4400).type('rotate').fromTo(0, -90);
 
 // 1000ms: Orb begins its path
-timeline.anim(orb1).at(1000).for(500).spline(ease.smooth).type(['scale', 'opacity']).move(0, 1);
+timeline.anim(orb1).at(1000).for(500).spline(ease.smooth).type(['scale', 'opacity']).fromTo(0, 1);
 timeline.anim(orb1).at(1000).for(4000).spline(ease.smooth).path(orbPath);
+// Add color fade for orb
+timeline.anim(orb1).at(1500).for(2500).spline(ease.smoothL).type('color').set('#ff00c8');
 
 // 1500ms: Bars shoot in and rotate
 bars.forEach((bar, i) => {
@@ -67,10 +71,10 @@ bars.forEach((bar, i) => {
 		.for(500)
 		.spline(ease.expOut)
 		.type(['scale', 'opacity'])
-		.move(0, 1);
-	timeline.anim(bar).at(2000).for(1000).spline(ease.smooth).type('rotate').moveBy(90);
-	timeline.anim(bar).at(4000).for(500).spline(ease.expIn).type(['translateX', 'translateY']).moveTo(0);
-	timeline.anim(bar).at(4500).for(200).type('opacity').moveTo(0);
+		.fromTo(0, 1);
+	timeline.anim(bar).at(2000).for(1000).spline(ease.smooth).type('rotate').by(90);
+	timeline.anim(bar).at(4000).for(500).spline(ease.expIn).type(['translateX', 'translateY']).to(0);
+	timeline.anim(bar).at(4500).for(200).type('opacity').to(0);
 });
 
 // 2000ms: Spark burst
@@ -81,7 +85,7 @@ sparks.forEach((spark, i) => {
 		.for(300)
 		.spline(ease.expOut)
 		.type(['scale', 'opacity'])
-		.move(0, 1)
+		.fromTo(0, 1)
 		.then()
 		.for(1500)
 		.spline(ease.expIn)
@@ -89,13 +93,21 @@ sparks.forEach((spark, i) => {
 		.then()
 		.for(100)
 		.type('opacity')
-		.moveTo(0);
+		.to(0);
+	// Add color fade for sparks
+	timeline
+		.anim(spark)
+		.at(2000 + i * 80)
+		.for(1800)
+		.spline(ease.smooth)
+		.type('color')
+		.fromTo('#fff', '#ff00c8');
 });
 
 // 4500ms: Final pulse and collapse
-timeline.anim(coreSquare).at(4500).for(500).spline(ease.expIn).type('scale').move(1, 0);
-timeline.anim(ring1).at(4500).for(500).spline(ease.expIn).type('scale').move(1, 0);
-timeline.anim(ring2).at(4500).for(500).spline(ease.expIn).type('scale').move(1, 0);
-timeline.anim(orb1).at(4500).for(500).spline(ease.expIn).type('scale').moveTo(0);
+timeline.anim(coreSquare).at(4500).for(500).spline(ease.expIn).type('scale').to(0);
+timeline.anim(ring1).at(4500).for(500).spline(ease.expIn).type('scale').to(0);
+timeline.anim(ring2).at(4500).for(500).spline(ease.expIn).type('scale').to(0);
+timeline.anim(orb1).at(4500).for(500).spline(ease.expIn).type('scale').to(0);
 
 timeline.play();
