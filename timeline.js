@@ -18,6 +18,9 @@ export class Timeline {
 			// required
 			at(time) {
 				startTime = time;
+				spline = ease.linear;
+				duration = 0;
+				type = [];
 				return this;
 			},
 
@@ -46,6 +49,9 @@ export class Timeline {
 
 			then() {
 				startTime += duration;
+				spline = ease.linear;
+				duration = 0;
+				type = [];
 				return this;
 			},
 
@@ -165,6 +171,8 @@ export class Timeline {
 		return {
 			at(time) {
 				startTime = time;
+				spline = ease.linear;
+				duration = 0;
 				return this;
 			},
 
@@ -198,6 +206,76 @@ export class Timeline {
 					type: 'color',
 					startValue: fromColor,
 					endValue: toColor,
+					startTime: startTime,
+					duration: duration,
+					spline: spline,
+				});
+				return this;
+			},
+		};
+	}
+
+	audio(file) {
+		const timeline = this;
+
+		const audio = new Audio(file);
+		let startTime = 0;
+		let duration = 0;
+		let spline = ease.linear;
+
+		return {
+			at(time) {
+				startTime = time;
+				spline = ease.linear;
+				duration = 0;
+				return this;
+			},
+
+			for(dur) {
+				duration = dur;
+				return this;
+			},
+
+			spline(s) {
+				spline = s;
+				return this;
+			},
+
+			play() {
+				timeline.animations.push({
+					target: audio,
+					type: 'audioStart',
+					startTime: startTime,
+					duration: 1,
+				});
+
+				if (duration > 0) {
+					timeline.animations.push({
+						target: audio,
+						type: 'audioStop',
+						startTime: startTime + duration,
+						duration: 1,
+					});
+				}
+				return this;
+			},
+
+			pause() {
+				timeline.animations.push({
+					target: audio,
+					type: 'audioStop',
+					startTime: startTime,
+					duration: 1,
+				});
+				return this;
+			},
+
+			volume(val) {
+				timeline.animations.push({
+					target: audio,
+					type: 'volume',
+					startValue: null,
+					endValue: val,
 					startTime: startTime,
 					duration: duration,
 					spline: spline,

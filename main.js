@@ -38,6 +38,10 @@ timeline.background().at(2150).set('#02040a');
 // Slow fade to purple during the collapse
 timeline.background().at(4000).for(1000).spline(ease.smooth).fade('#02040a', '#1a0229');
 
+// --- Audio Testing ---
+// Play audio at start, fade volume during animation, pause at end
+timeline.audio('test.mp3').at(0).play().at(1000).for(1000).spline(ease.smooth).volume(0.5).at(3000).for(3000).volume(0).at(5000).pause();
+
 // --- Animation Sequence (5 seconds) ---
 
 // 0ms: Core build-up

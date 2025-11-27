@@ -148,6 +148,10 @@ export function animationLoop(currentTime) {
 			animation.endValue = animation.startValue + animation.endValue;
 		}
 
+		if (animation.type === 'volume' && animation.startValue === null) {
+			animation.startValue = animation.target.volume;
+		}
+
 		const elapsed = currentTime - animation.startTime;
 		const progress = Math.min(1, elapsed / animation.duration);
 
@@ -167,9 +171,20 @@ export function animationLoop(currentTime) {
 					a: animation.colorStart.a + (animation.colorEnd.a - animation.colorStart.a) * value,
 				};
 				break;
+			case 'audioStart':
+				animation.target.play();
+				continue;
+			case 'audioStop':
+				animation.target.pause();
+				continue;
 			default:
 				currentValue = animation.startValue + (animation.endValue - animation.startValue) * value;
 				break;
+		}
+
+		if (animation.type === 'volume') {
+			if (currentValue < 0.0001) currentValue = 0;
+			animation.target.volume = currentValue;
 		}
 
 		// apply values
