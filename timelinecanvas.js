@@ -9,6 +9,25 @@ export class TimelineCanvas extends HTMLElement {
 		this.width = this.getAttribute('width') || 500;
 		this.height = this.getAttribute('height') || 500;
 
+		const ratio = this.getAttribute('ratio');
+		if (ratio !== null) {
+			if (ratio.includes('/')) {
+				const [num, den] = ratio.split('/').map(Number);
+				this.ratio = num / den;
+			} else {
+				this.ratio = parseFloat(ratio);
+			}
+			const screenWidth = window.innerWidth;
+			const screenHeight = window.innerHeight;
+			if (screenWidth / screenHeight > this.ratio) {
+				this.height = screenHeight;
+				this.width = screenHeight * this.ratio;
+			} else {
+				this.width = screenWidth;
+				this.height = screenWidth / this.ratio;
+			}
+		}
+
 		if (this.getAttribute('border')) {
 			this.style.border = '1px solid white';
 		}

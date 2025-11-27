@@ -6,5 +6,5 @@
 6. use then() to chain animations after one another
 7. background can be set with timeline.background().at(ms).set(hex/rgba)
 8. element's background-color can be set with .type('color').set() or .fromTo()
-
-animation sequence was ai gen
+9. audio can be added with timeline.audio(file) - can use at(), for(), spline(), play(), pause(), volume(val)
+10. timelinecanvas can use width and height, or just set ratio attribute to some string ex "16/9"
