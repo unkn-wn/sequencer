@@ -8,51 +8,8 @@ body {
 	overflow: hidden;
 }
 
-.main-shape {
+.square {
 	width: 100px;
 	height: 100px;
-	border: 2px solid #a7dcff;
-	background: linear-gradient(45deg, rgba(0, 150, 255, 0.1), rgba(150, 0, 255, 0.1));
-	box-shadow: 0 0 15px #a7dcff, inset 0 0 15px #a7dcff;
-}
-
-.ring {
-	border-radius: 50%;
-	border: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-#ring1 {
-	width: 300px;
-	height: 300px;
-}
-
-#ring2 {
-	width: 400px;
-	height: 400px;
-	border-style: dashed;
-}
-
-.glow-orb {
-	width: 50px;
-	height: 50px;
-	background: radial-gradient(circle, #fff, #00aaff);
-	border-radius: 50%;
-	box-shadow: 0 0 10px #fff, 0 0 30px #00aaff;
-	background-color: #00aaff; /* Initial color */
-}
-
-.spark {
-	width: 8px;
-	height: 8px;
-	background: #fff;
-	border-radius: 50%;
-	box-shadow: 0 0 5px #fff, 0 0 15px #fff;
-	background-color: #fff; /* Initial color */
-}
-
-.bar {
-	width: 250px;
-	height: 2px;
-	background-color: #a7dcff;
-	box-shadow: 0 0 10px #00aaff;
+	background-color: #ff5733;
 }
