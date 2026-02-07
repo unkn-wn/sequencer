@@ -35,6 +35,8 @@ export class TimelineCanvas extends HTMLElement {
 		this.style.height = this.height + 'px';
 
 		this.style.position = 'absolute';
+		this.style.left = '50%';
+		this.style.top = '50%';
 		this.style.overflow = 'hidden';
 
 		this.resize = this.resize.bind(this);
@@ -50,11 +52,25 @@ export class TimelineCanvas extends HTMLElement {
 
 		this.resize();
 		window.addEventListener('resize', () => this.resize());
+		this.addEventListener('click', this.handleClick);
 	}
 
 	disconnectedCallback() {
 		window.removeEventListener('resize', this.resize);
 	}
+
+	handleClick = (e) => {
+		// deselect everything when clicking bg
+		if (e.target === this) {
+			this.deselectAll();
+		}
+	};
+
+	deselectAll = () => {
+		if (window.sequencerEditor) {
+			window.sequencerEditor.selectElement(null);
+		}
+	};
 
 	resize() {
 		const screenX = window.innerWidth;
@@ -67,7 +83,7 @@ export class TimelineCanvas extends HTMLElement {
 		const scale = Math.min(scaleX, scaleY) - 0.005;
 		this.scale = scale;
 
-		this.style.transform = `scale(${scale})`;
+		this.style.transform = `translate(-50%, -50%) scale(${scale})`;
 	}
 }
 

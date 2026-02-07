@@ -44,7 +44,7 @@ export const ease = {
 	],
 };
 
-const mapping = {
+export const mapping = {
 	translateX: 'x',
 	translateY: 'y',
 	opacity: 'opacity',
@@ -133,7 +133,7 @@ export function animationLoop(currentTime) {
 	// if (currentTime - lastFrame < frameDur) return;
 	// lastFrame = currentTime;
 
-	for (let i = animations.length - 1; i >= 0; i--) {
+	for (let i = 0; i < animations.length; i++) {
 		const animation = animations[i];
 
 		if (currentTime < animation.startTime) continue;
@@ -194,6 +194,7 @@ export function animationLoop(currentTime) {
 
 		if (progress >= 1) {
 			animations.splice(i, 1);
+			i--;
 		}
 	}
 }
@@ -280,7 +281,7 @@ function bezierEaseY(progress, spline) {
 	return lineY;
 }
 
-function bezierEase(progress, spline) {
+export function bezierEase(progress, spline) {
 	if (progress <= 0) return 0;
 	if (progress >= 1) return 1;
 
@@ -302,7 +303,7 @@ function bezierEase(progress, spline) {
 }
 
 // coloring functions for bg and element colors
-function parseColor(col) {
+export function parseColor(col) {
 	const rgba = { r: 0, g: 0, b: 0, a: 1 };
 
 	if (typeof col === 'string' && col.startsWith('#')) {

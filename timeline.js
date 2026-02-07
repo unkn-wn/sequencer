@@ -1,6 +1,163 @@
-import { Animation, animationLoop, ease } from './animation.js';
+import { Animation, animationLoop, ease, getState, applyState, setState, bezierEase, parseColor, mapping } from './animation.js';
 import { Path } from './path.js';
 
+requestAnimationFrame(animationLoop);
+
+// FOR EDITING
+function createController(animations) {
+	const controller = {
+		animations: animations,
+		initialStates: new Map(),
+		currentTime: 0,
+		isPlaying: false,
+		duration: 0,
+		fixedDuration: null,
+		ease: ease,
+		_startTimestamp: 0,
+		onFinish: null,
+
+		sortAnimations() {
+			this.animations.sort((a, b) => a.startTime - b.startTime);
+		},
+
+		calculateDuration() {
+			this.duration = 0;
+			for (const anim of this.animations) {
+				const end = anim.startTime + anim.duration;
+				if (end > this.duration) this.duration = end;
+			}
+			if (this.fixedDuration && this.fixedDuration > this.duration) {
+				this.duration = this.fixedDuration;
+			}
+		},
+
+		captureInitialStates() {
+			for (const anim of this.animations) {
+				if (!this.initialStates.has(anim.target)) {
+					const state = getState(anim.target);
+					this.initialStates.set(anim.target, JSON.parse(JSON.stringify(state)));
+				}
+			}
+		},
+
+		refresh() {
+			this.sortAnimations();
+			this.calculateDuration();
+			this.captureInitialStates();
+		},
+
+		play() {
+			if (this.isPlaying) return;
+			this.isPlaying = true;
+
+			const start = performance.now() - this.currentTime;
+			this._startTimestamp = start;
+
+			// Spawn Animation instances for playback
+			for (const anim of this.animations) {
+				if (this.currentTime >= anim.startTime + anim.duration) continue;
+
+				new Animation(
+					anim.target,
+					anim.type,
+					anim.startValue,
+					anim.endValue,
+					anim.startTime + start,
+					anim.duration,
+					anim.spline,
+					anim.state,
+					anim.path,
+				);
+			}
+
+			this._trackLoop();
+		},
+
+		_trackLoop() {
+			if (!this.isPlaying) return;
+
+			this.currentTime = performance.now() - this._startTimestamp;
+
+			if (this.currentTime >= this.duration) {
+				this.currentTime = this.duration;
+				this.pause();
+				if (this.onFinish) this.onFinish();
+				return;
+			}
+
+			requestAnimationFrame(() => this._trackLoop());
+		},
+
+		pause() {
+			this.isPlaying = false;
+		},
+
+		seek(time) {
+			this.currentTime = Math.max(0, Math.min(time, this.duration));
+			this._renderPreview();
+		},
+
+		_renderPreview() {
+			// Reset to initial
+			for (const [element, initialState] of this.initialStates) {
+				const currentState = getState(element);
+				Object.assign(currentState, JSON.parse(JSON.stringify(initialState)));
+			}
+
+			// Apply animations up to currentTime
+			for (const anim of this.animations) {
+				if (this.currentTime < anim.startTime) continue;
+
+				const elapsed = this.currentTime - anim.startTime;
+				let progress = anim.duration === 0 ? 1 : Math.min(1, elapsed / anim.duration);
+				const easeValue = anim.spline ? bezierEase(progress, anim.spline) : progress;
+
+				let start = anim.startValue;
+				let end = anim.endValue;
+				const currentState = getState(anim.target);
+				const prop = mapping[anim.type];
+
+				if (anim.state === 'to') {
+					start = currentState[prop];
+				} else if (anim.state === 'by') {
+					start = currentState[prop];
+					end = start + anim.endValue;
+				}
+
+				let val;
+				if (anim.type === 'path') {
+					val = anim.path.calculatePosition(easeValue);
+				} else if (anim.type === 'color') {
+					const s = parseColor(start);
+					const e = parseColor(end);
+					val = {
+						r: s.r + (e.r - s.r) * easeValue,
+						g: s.g + (e.g - s.g) * easeValue,
+						b: s.b + (e.b - s.b) * easeValue,
+						a: s.a + (e.a - s.a) * easeValue,
+					};
+				} else if (anim.type === 'audioStart' || anim.type === 'audioStop') {
+					continue;
+				} else {
+					val = start + (end - start) * easeValue;
+				}
+
+				setState(currentState, anim.type, val);
+			}
+
+			// Apply states
+			for (const [element, _] of this.initialStates) {
+				applyState(element, getState(element));
+			}
+		},
+	};
+
+	controller.sortAnimations();
+	controller.calculateDuration();
+	controller.captureInitialStates();
+
+	return controller;
+}
 export class Timeline {
 	constructor() {
 		this.animations = [];
@@ -55,15 +212,65 @@ export class Timeline {
 				return this;
 			},
 
-			// instant place x,y
+			// instant place x,y or object
 			place(x, y) {
+				if (typeof x === 'object') {
+					const props = x;
+					if (props.x !== undefined)
+						timeline.animations.push({
+							target,
+							type: 'translateX',
+							startValue: props.x,
+							endValue: props.x,
+							startTime: startTime,
+							duration: 0,
+						});
+					if (props.y !== undefined)
+						timeline.animations.push({
+							target,
+							type: 'translateY',
+							startValue: props.y,
+							endValue: props.y,
+							startTime: startTime,
+							duration: 0,
+						});
+					if (props.scale !== undefined)
+						timeline.animations.push({
+							target,
+							type: 'scale',
+							startValue: props.scale,
+							endValue: props.scale,
+							startTime: startTime,
+							duration: 0,
+						});
+					if (props.rotate !== undefined)
+						timeline.animations.push({
+							target,
+							type: 'rotate',
+							startValue: props.rotate,
+							endValue: props.rotate,
+							startTime: startTime,
+							duration: 0,
+						});
+					if (props.opacity !== undefined)
+						timeline.animations.push({
+							target,
+							type: 'opacity',
+							startValue: props.opacity,
+							endValue: props.opacity,
+							startTime: startTime,
+							duration: 0,
+						});
+					return this;
+				}
+
 				timeline.animations.push({
 					target: target,
 					type: 'translateX',
 					startValue: x,
 					endValue: x,
 					startTime: startTime,
-					duration: 1,
+					duration: 0,
 				});
 				timeline.animations.push({
 					target: target,
@@ -71,7 +278,7 @@ export class Timeline {
 					startValue: y,
 					endValue: y,
 					startTime: startTime,
-					duration: 1,
+					duration: 0,
 				});
 				return this;
 			},
@@ -85,7 +292,7 @@ export class Timeline {
 						startValue: val,
 						endValue: val,
 						startTime: startTime,
-						duration: 1,
+						duration: 0,
 					});
 				}
 				return this;
@@ -195,7 +402,7 @@ export class Timeline {
 					startValue: color,
 					endValue: color,
 					startTime: startTime,
-					duration: 1,
+					duration: 0,
 				});
 				return this;
 			},
@@ -246,7 +453,7 @@ export class Timeline {
 					target: audio,
 					type: 'audioStart',
 					startTime: startTime,
-					duration: 1,
+					duration: 0,
 				});
 
 				if (duration > 0) {
@@ -254,7 +461,7 @@ export class Timeline {
 						target: audio,
 						type: 'audioStop',
 						startTime: startTime + duration,
-						duration: 1,
+						duration: 0,
 					});
 				}
 				return this;
@@ -265,7 +472,7 @@ export class Timeline {
 					target: audio,
 					type: 'audioStop',
 					startTime: startTime,
-					duration: 1,
+					duration: 0,
 				});
 				return this;
 			},
@@ -286,22 +493,13 @@ export class Timeline {
 	}
 
 	play() {
-		const start = performance.now();
+		const controller = createController(this.animations);
+		controller.play();
 
-		for (const animation of this.animations) {
-			new Animation(
-				animation.target,
-				animation.type,
-				animation.startValue,
-				animation.endValue,
-				animation.startTime + start,
-				animation.duration,
-				animation.spline,
-				animation.state,
-				animation.path
-			);
+		if (window.sequencerEditor) {
+			window.sequencerEditor.attachController(controller);
 		}
 
-		requestAnimationFrame(animationLoop);
+		return controller;
 	}
 }
