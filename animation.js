@@ -101,7 +101,11 @@ export function applyState(element, state) {
 		const curScale = element.scale || 1;
 		const css = `translate(-50%, -50%) translateX(${state.x}px) translateY(${state.y}px) scale(${curScale})`;
 		element.style.transform = css;
+ 
 		element.style.opacity = state.opacity;
+		if (state.opacity === 0) element.style.display = 'none';
+		else element.style.display = 'block';
+
 		return;
 	}
 
@@ -110,7 +114,11 @@ export function applyState(element, state) {
 	
 	const css = `${centerCSS} translateX(${state.x}px) translateY(${state.y}px) scale(${state.scale}) scaleX(${state.scaleX}) scaleY(${state.scaleY}) rotate(${state.rotation}deg)`;
 	element.style.transform = css;
+
 	element.style.opacity = state.opacity;
+	if (state.opacity === 0) element.style.display = 'none';
+	else element.style.display = 'block';
+
 	if (state.color) {
 		element.style.backgroundColor = `rgba(${state.color.r}, ${state.color.g}, ${state.color.b}, ${state.color.a})`;
 	}

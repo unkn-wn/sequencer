@@ -8,7 +8,7 @@
 		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 	</head>
 	<body>
-		<timeline-canvas design-width="1920" design-height="1080">
+		<timeline-canvas class="z-30" design-width="1920" design-height="1080">
 			<div class="square" id="flare1"></div>
 			<div class="hello">HELLO</div>
 			<div class="square" id="bg-square"></div>
@@ -63,10 +63,10 @@
 			</div>
 		</timeline-canvas>
 
-		<div id="black-overlay"></div>
-		<div id="website-cover" class="z-[-5]"></div>
+		<div id="black-overlay" class="z-40"></div>
+		<div id="website-cover" class="z-10"></div>
 
-		<div class="fixed inset-0 z-[-10] overflow-y-auto p-8 md:p-12" id="MAIN-WEBSITE">
+		<div class="fixed inset-0 overflow-y-auto p-8 md:p-12" id="MAIN-WEBSITE">
 			<div class="flex flex-col md:flex-row gap-8 md:gap-12 h-full">
 				<div class="flex flex-col justify-center shrink-0 text-center text-left">
 					<h2 class="text-white text-base font-light">Hello, I'm</h2>
@@ -79,36 +79,36 @@
 					<div class="flex flex-col md:flex-row gap-3">
 						<div class="flex flex-col gap-3">
 							<div class="flex flex-row justify-between gap-3">
-								<a href="https://youtu.be/QavKRE5ygyg" target="_blank" class="overflow-hidden bg-[#0a0c12] cursor-pointer">
+								<a href="https://youtu.be/QavKRE5ygyg" target="_blank" class="overflow-hidden cursor-pointer">
 									<video class="h-32 md:h-64 object-cover portfolio-video" style="aspect-ratio: 2.39/1;" loop muted playsinline>
 										<source data-src="videos/DieForYou.webm" type="video/webm">
 									</video>
 								</a>
-								<a href="https://youtu.be/djOY4S_h2a8" target="_blank" class="overflow-hidden bg-[#0a0c12] cursor-pointer">
+								<a href="https://youtu.be/djOY4S_h2a8" target="_blank" class="overflow-hidden cursor-pointer">
 									<video class="h-32 md:h-64 object-cover portfolio-video" style="aspect-ratio: 16/9;" loop muted playsinline>
 										<source data-src="videos/MontagemRugada.webm" type="video/webm">
 									</video>
 								</a>
 							</div>
 							<div class="flex flex-row justify-between gap-3">
-								<a href="https://youtu.be/D8dFo6gef2o" target="_blank" class="overflow-hidden bg-[#0a0c12] cursor-pointer">
+								<a href="https://youtu.be/D8dFo6gef2o" target="_blank" class="overflow-hidden cursor-pointer">
 									<video class="h-32 md:h-64 object-cover portfolio-video" style="aspect-ratio: 1/1;" loop muted playsinline>
 										<source data-src="videos/Rain.webm" type="video/webm">
 									</video>
 								</a>
-								<a href="https://youtu.be/F6zZVZIBASs" target="_blank" class="overflow-hidden bg-[#0a0c12] cursor-pointer">
+								<a href="https://youtu.be/F6zZVZIBASs" target="_blank" class="overflow-hidden cursor-pointer">
 									<video class="h-32 md:h-64 object-cover portfolio-video" style="aspect-ratio: 16/9;" loop muted playsinline>
 										<source data-src="videos/Unveil.webm" type="video/webm">
 									</video>
 								</a>
-								<a href="https://youtu.be/2K8CNMJHefk" target="_blank" class="overflow-hidden bg-[#0a0c12] cursor-pointer">
+								<a href="https://youtu.be/2K8CNMJHefk" target="_blank" class="overflow-hidden cursor-pointer">
 									<video class="h-32 md:h-64 object-cover portfolio-video" style="aspect-ratio: 1/1;" loop muted playsinline>
 										<source data-src="videos/LikeThat.webm" type="video/webm">
 									</video>
 								</a>
 							</div>
 						</div>
-						<a href="https://youtu.be/syTRiTCUcv8" target="_blank" class="overflow-hidden bg-[#0a0c12] cursor-pointer hidden md:block">
+						<a href="https://youtu.be/syTRiTCUcv8" target="_blank" class="overflow-hidden cursor-pointer hidden md:block">
 							<video class="object-cover h-128 portfolio-video" style="aspect-ratio: 9/16;" loop muted playsinline>
 								<source data-src="videos/NoRoleModelz.webm" type="video/webm">
 							</video>
