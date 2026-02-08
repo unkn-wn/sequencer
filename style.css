@@ -8,8 +8,9 @@ body {
 	overflow: hidden;
 }
 
-.square {
-	width: 100px;
-	height: 100px;
-	background-color: #ff5733;
+.hello {
+	font-size: 200px;
+	font-weight: bolder;
+	color: white;
+	font-family: 'Montserrat', sans-serif;
 }

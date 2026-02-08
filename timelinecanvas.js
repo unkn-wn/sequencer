@@ -1,32 +1,31 @@
 export class TimelineCanvas extends HTMLElement {
-	scale;
+	scale = 1;
+	designWidth = 1920;
+	designHeight = 1080;
 
 	constructor() {
 		super();
 
 		this.setAttribute('id', 'sequencer-timeline-canvas');
 
-		this.width = this.getAttribute('width') || 500;
-		this.height = this.getAttribute('height') || 500;
+		this.designWidth = parseFloat(this.getAttribute('design-width')) || 1920;
+		this.designHeight = parseFloat(this.getAttribute('design-height')) || 1080;
 
-		const ratio = this.getAttribute('ratio');
-		if (ratio !== null) {
-			if (ratio.includes('/')) {
-				const [num, den] = ratio.split('/').map(Number);
-				this.ratio = num / den;
-			} else {
-				this.ratio = parseFloat(ratio);
-			}
-			const screenWidth = window.innerWidth;
-			const screenHeight = window.innerHeight;
-			if (screenWidth / screenHeight > this.ratio) {
-				this.height = screenHeight;
-				this.width = screenHeight * this.ratio;
-			} else {
-				this.width = screenWidth;
-				this.height = screenWidth / this.ratio;
-			}
-		}
+		// const ratio = this.getAttribute('ratio');
+		// if (ratio !== null) {
+		// 	if (ratio.includes('/')) {
+		// 		const [num, den] = ratio.split('/').map(Number);
+		// 		this.ratio = num / den;
+		// 	} else {
+		// 		this.ratio = parseFloat(ratio);
+		// 	}
+		// 	this.designHeight = this.designWidth / this.ratio;
+		// } else {
+		// 	this.ratio = this.designWidth / this.designHeight;
+		// }
+
+		this.width = this.designWidth;
+		this.height = this.designHeight;
 
 		if (this.getAttribute('border')) {
 			this.style.border = '1px solid white';
@@ -38,6 +37,7 @@ export class TimelineCanvas extends HTMLElement {
 		this.style.left = '50%';
 		this.style.top = '50%';
 		this.style.overflow = 'hidden';
+		this.style.transformOrigin = 'center center';
 
 		this.resize = this.resize.bind(this);
 	}
@@ -76,11 +76,9 @@ export class TimelineCanvas extends HTMLElement {
 		const screenX = window.innerWidth;
 		const screenY = window.innerHeight;
 
-		if (screenX > this.width && screenY > this.height) return;
-
-		const scaleX = screenX / this.width;
-		const scaleY = screenY / this.height;
-		const scale = Math.min(scaleX, scaleY) - 0.005;
+		const scaleX = screenX / this.designWidth;
+		const scaleY = screenY / this.designHeight;
+		const scale = Math.min(scaleX, scaleY);
 		this.scale = scale;
 
 		this.style.transform = `translate(-50%, -50%) scale(${scale})`;

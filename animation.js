@@ -139,11 +139,11 @@ export function animationLoop(currentTime) {
 		if (currentTime < animation.startTime) continue;
 
 		////////////// move type ///////// //////////////////
-		if (animation.moveType === 'to') {
+		if (animation.moveType === 'to' && animation.startValue === null) {
 			animation.startValue = getState(animation.target)[mapping[animation.type]];
 		}
 
-		if (animation.moveType === 'by') {
+		if (animation.moveType === 'by' && animation.startValue === null) {
 			animation.startValue = getState(animation.target)[mapping[animation.type]];
 			animation.endValue = animation.startValue + animation.endValue;
 		}

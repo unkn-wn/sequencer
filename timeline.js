@@ -363,6 +363,32 @@ export class Timeline {
 
 				return this;
 			},
+
+			// hide element
+			hide() {
+				timeline.animations.push({
+					target: target,
+					type: 'opacity',
+					startValue: null,
+					endValue: 0,
+					startTime: startTime,
+					duration: 0,
+				});
+				return this;
+			},
+
+			// unhide
+			show() {
+				timeline.animations.push({
+					target: target,
+					type: 'opacity',
+					startValue: null,
+					endValue: 1,
+					startTime: startTime,
+					duration: 0,
+				});
+				return this;
+			},
 		};
 	}
 
