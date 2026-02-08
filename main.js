@@ -57,7 +57,7 @@ timeline.anim(HELLO)
 	.then().at(550).type('scaleX').set(0.1);
 
 // elements
-timeline.anim(square).at(100).show().type('scale').set(2).then().at(150).hide();
+// timeline.anim(square).at(100).show().type('scale').set(2).then().at(150).hide();
 timeline.anim(square).at(550).place({x: -200, y: 0}).show().type('scaleX').set(5).type('scaleY').set(0.1).then().at(600).hide();
 
 const flare1 = document.querySelector('#flare1');
@@ -74,7 +74,7 @@ timeline.anim(flare1).at(1).place({x: 400, y: 300}).show().type('rotate').set(60
 const IAM = document.querySelector('.iam');
 timeline.anim(IAM).at(1).hide();
 
-timeline.background().at(600).set('#ffffff');
+// timeline.background().at(600).set('#ffffff');
 timeline.anim(IAM).at(600).place({x: 200, y:0}).show();
 timeline
 	.anim(IAM)
@@ -144,12 +144,12 @@ timeline.anim(IAM)
 	.then()
 	.at(720)
 	.type('color')
-	.set('#ffffff');
+	.set('#000000');
 
 // elements
 
 const blackSquare = document.querySelector('.blackSquare');
-timeline.anim(blackSquare).at(1).hide();
+timeline.anim(blackSquare).at(1).hide().type('color').set('#fff');
 
 timeline.anim(blackSquare).at(600)
 	.type('scaleY').set(0.2)
@@ -280,13 +280,10 @@ timeline.anim(blackOverlay).at(1).hide().place({x: window.innerWidth, y: 0});
 timeline.anim(blackOverlay).at(1750).show();
 timeline.anim(blackOverlay).at(1750).then().for(1250).type('translateX').spline([{ x: 1, y: 0 }, { x: 0, y: 1 }]).to(-window.innerWidth);
 
+const websiteCover = document.querySelector('#website-cover');
+timeline.anim(websiteCover).at(1).show();
+timeline.anim(websiteCover).at(1750 + 1250/2).hide();
+timeline.hide(1750 + 1250/2);
+
+
 timeline.play();
-
-
-
-
-const mainWebsite = document.querySelector('#MAIN-WEBSITE');
-mainWebsite.style.visibility = 'hidden';
-setTimeout(() => {
-    mainWebsite.style.visibility = 'visible';
-}, 1750 + 1250/2 + 15);

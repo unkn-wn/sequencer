@@ -36,17 +36,23 @@ body {
 	z-index: 20;
 }
 
+#website-cover {
+	position: fixed;
+	inset: 0;
+	background-color: black;
+}
+
 .iam {
 	font-size: 100px;
 	font-weight: lighter;
-	color: black;
+	color: white;
 	font-family: 'Montserrat', sans-serif;
 }
 
 .iam-char {
 	font-size: 100px;
 	font-weight: bolder;
-	color: black;
+	color: white;
 	font-family: 'Montserrat', sans-serif;
 }
 

@@ -48,13 +48,10 @@ function createController(animations) {
 
 		play() {
 			if (this.isPlaying) return;
-			
+
 			// Wait for everything to be ready before starting
 			const waitForReady = () => {
-				Promise.all([
-					document.fonts.ready,
-					customElements.whenDefined('timeline-canvas'),
-				]).then(() => {
+				Promise.all([document.fonts.ready, customElements.whenDefined('timeline-canvas')]).then(() => {
 					// Wait 2 frames for layout to fully settle
 					requestAnimationFrame(() => {
 						requestAnimationFrame(() => {
@@ -553,5 +550,18 @@ export class Timeline {
 		}
 
 		return controller;
+	}
+
+	// TIMELINE HIDING
+	hide(time) {
+		const canvas = document.querySelector('timeline-canvas');
+		this.animations.push({
+			target: canvas,
+			type: 'opacity',
+			startValue: 1,
+			endValue: 0,
+			startTime: time,
+			duration: 1,
+		});
 	}
 }
