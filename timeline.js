@@ -48,6 +48,32 @@ function createController(animations) {
 
 		play() {
 			if (this.isPlaying) return;
+			
+			// Wait for everything to be ready before starting
+			const waitForReady = () => {
+				Promise.all([
+					document.fonts.ready,
+					customElements.whenDefined('timeline-canvas'),
+				]).then(() => {
+					// Wait 2 frames for layout to fully settle
+					requestAnimationFrame(() => {
+						requestAnimationFrame(() => {
+							this._startPlayback();
+						});
+					});
+				});
+			};
+
+			// If page is still loading, wait for load event
+			if (document.readyState !== 'complete') {
+				window.addEventListener('load', waitForReady, { once: true });
+			} else {
+				waitForReady();
+			}
+		},
+
+		_startPlayback() {
+			if (this.isPlaying) return;
 			this.isPlaying = true;
 
 			const start = performance.now() - this.currentTime;

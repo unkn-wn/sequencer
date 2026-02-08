@@ -289,4 +289,4 @@ const mainWebsite = document.querySelector('#MAIN-WEBSITE');
 mainWebsite.style.visibility = 'hidden';
 setTimeout(() => {
     mainWebsite.style.visibility = 'visible';
-}, 1750 + 1250/2);
+}, 1750 + 1250/2 + 10);
