@@ -5,16 +5,22 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>JS Animation Testbed</title>
 		<link rel="stylesheet" href="style.css" />
+		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 	</head>
 	<body>
 		<timeline-canvas design-width="1920" design-height="1080">
+			<div class="square" id="flare1"></div>
 			<div class="hello">HELLO</div>
-			<div class="square"></div>
+			<div class="square" id="bg-square"></div>
+
 			<div class="iam">I'M</div>
 			<div class="iam-char" id="char-I">I</div>
 			<div class="iam-char" id="char-apos">'</div>
 			<div class="iam-char" id="char-M">M</div>
 			<div class="blackSquare"></div>
+			<div class="square" id="flare2"></div>
+			<div class="square" id="flare3"></div>
+
 			<div class="name">
 				<div class="name-layer name-shadow2">
 					<div class="name1"></div>
@@ -55,8 +61,26 @@
 					<div class="mask" id="mask2"></div>
 				</div>
 			</div>
-
 		</timeline-canvas>
+
+		<div id="black-overlay"></div>
+
+		<div class="z-10 w-full h-full p-6" id="MAIN-WEBSITE">
+			<div class="flex flex-row">
+				<div class="flex flex-col">
+					<h2 class="text-white text-base font-light">Hello, I'm</h2>
+					<h1 class="text-white text-5xl font-bold">LEON</h1>
+				</div>
+
+				<div class="grid grid-cols-2 gap-2 w-full">
+					<video src="" class="bg-red-400"></video>
+					<video src="" class="bg-red-400"></video>
+					<video src="" class="bg-red-400"></video>
+					<video src="" class="bg-red-400"></video>
+				</div>
+			</div>
+		</div>
+
 		<script type="module" src="main.js"></script>
 	</body>
 </html>

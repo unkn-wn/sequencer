@@ -9,7 +9,7 @@ const timeline = new Timeline();
 timeline.background().at(1).set('#000');
 
 const HELLO = document.querySelector('.hello');
-const square = document.querySelector('.square');
+const square = document.querySelector('#bg-square');
 
 timeline.anim(HELLO).at(1).place({ x: 200, y: 0 });
 timeline.anim(HELLO).at(1).hide();
@@ -59,6 +59,13 @@ timeline.anim(HELLO)
 // elements
 timeline.anim(square).at(100).show().type('scale').set(2).then().at(150).hide();
 timeline.anim(square).at(550).place({x: -200, y: 0}).show().type('scaleX').set(5).type('scaleY').set(0.1).then().at(600).hide();
+
+const flare1 = document.querySelector('#flare1');
+timeline.anim(flare1).at(1).type('color').set('#6064ea');
+timeline.anim(flare1).at(1).place({x: 400, y: 300}).show().type('rotate').set(60).type('scale').set(1.5)
+	.then().for(600).type('rotate').spline(ease.expIn).to(-15)
+	.type('translateX').to(0)
+	.then().hide();
 
 // HELLO LEAVES at 600
 
@@ -150,6 +157,20 @@ timeline.anim(blackSquare).at(600)
 	.place({x: 200, y:0}).show()
 	.then().for(100).type('translateX').to(-200)
 	.then().at(650).hide();
+
+const flare2 = document.querySelector('#flare2');
+timeline.anim(flare2).at(1).type('color').set('#6064ea').hide();
+timeline.anim(flare2).at(600).place({x: 100, y: 300}).show().type('rotate').set(762).type('scale').set(0.2)
+	.then().for(600).type('rotate').spline([{x: 0.1, y: 0.5}, {x: 0.9, y: 0.5}]).by(-90)
+	.type('translateX').by(-300)
+	.then().hide();
+
+const flare3 = document.querySelector('#flare3');
+timeline.anim(flare3).at(1).type('color').set('#6064ea').hide();
+timeline.anim(flare3).at(600).place({x: 500, y: -200}).show().type('rotate').set(1234).type('scale').set(0.15)
+	.then().for(600).type('rotate').spline([{x: 0.1, y: 0.5}, {x: 0.9, y: 0.5}]).by(-68)
+	.type('translateX').by(-500)
+	.then().hide();
 
 
 
@@ -250,8 +271,22 @@ timeline.anim(mask1).at(1745).show().place({x: 898, y: -18});
 timeline.anim(mask2).at(1745).show().place({x: 1060, y: 329});
 
 
-// MAIN ANIM DONE NOW ---------------------------------------------------------------------
+// MAIN ANIM DONE NOW AT 2000 ---------------------------------------------------------------------
 
+timeline.anim(nameContainer).at(1750).then().for(1250).type('translateX').spline([{ x: 1, y: 0 }, { x: 0, y: 1 }]).to(-1200).then().hide();
+
+const blackOverlay = document.querySelector('#black-overlay');
+timeline.anim(blackOverlay).at(1).hide().place({x: window.innerWidth, y: 0});
+timeline.anim(blackOverlay).at(1750).show();
+timeline.anim(blackOverlay).at(1750).then().for(1250).type('translateX').spline([{ x: 1, y: 0 }, { x: 0, y: 1 }]).to(-window.innerWidth);
 
 timeline.play();
 
+
+
+
+const mainWebsite = document.querySelector('#MAIN-WEBSITE');
+mainWebsite.style.visibility = 'hidden';
+setTimeout(() => {
+    mainWebsite.style.visibility = 'visible';
+}, 1750 + 1250/2);

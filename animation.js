@@ -98,10 +98,16 @@ export function getState(element) {
 export function applyState(element, state) {
 	if (element.id === 'sequencer-timeline-canvas') {
 		element.style.backgroundColor = `rgba(${state.color.r}, ${state.color.g}, ${state.color.b}, ${state.color.a})`;
+		const curScale = element.scale || 1;
+		const css = `translate(-50%, -50%) translateX(${state.x}px) translateY(${state.y}px) scale(${curScale})`;
+		element.style.transform = css;
 		return;
 	}
 
-	const css = `translate(-50%, -50%) translateX(${state.x}px) translateY(${state.y}px) scale(${state.scale}) scaleX(${state.scaleX}) scaleY(${state.scaleY}) rotate(${state.rotation}deg)`;
+	const in_canvas = element.closest('timeline-canvas') !== null;
+	const centerCSS = in_canvas ? 'translate(-50%, -50%)' : '';
+	
+	const css = `${centerCSS} translateX(${state.x}px) translateY(${state.y}px) scale(${state.scale}) scaleX(${state.scaleX}) scaleY(${state.scaleY}) rotate(${state.rotation}deg)`;
 	element.style.transform = css;
 	element.style.opacity = state.opacity;
 	if (state.color) {
