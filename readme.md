@@ -8,4 +8,4 @@
 8. background can be set with timeline.background().at(ms).set(hex/rgba)
 9. element's background-color can be set with .type('color').set() or .fromTo()
 10. audio can be added with timeline.audio(file) - can use at(), for(), spline(), play(), pause(), volume(val)
-11. timelinecanvas can use width and height, or just set ratio attribute to some string ex "16/9"
+11. timelinecanvas uses design-width and design-height attributes, and everything inside is scales according to the screen size

@@ -14,3 +14,185 @@ body {
 	color: white;
 	font-family: 'Montserrat', sans-serif;
 }
+
+.square {
+	width: 500px;
+	height: 500px;
+	background-color: white;
+}
+
+.blackSquare {
+	width: 500px;
+	height: 500px;
+	background-color: black;
+}
+
+.iam {
+	font-size: 100px;
+	font-weight: lighter;
+	color: black;
+	font-family: 'Montserrat', sans-serif;
+}
+
+.iam-char {
+	font-size: 100px;
+	font-weight: bolder;
+	color: black;
+	font-family: 'Montserrat', sans-serif;
+}
+
+#char-I {
+	margin-left: -56px;
+	margin-top: -1px;
+}
+
+#char-apos {
+	margin-left: -34px;
+	margin-top: -1px;
+}
+
+#char-M {
+	margin-left: 25px;
+	margin-top: -1px;
+}
+
+/* LEON name strokes - scaled for 300px Montserrat Bold */
+.name {
+	position: relative;
+	width: 900px;
+	height: 300px;
+}
+
+/* L - 2 strokes */
+.name1 { /* L horizontal bottom */
+	position: absolute;
+	width: 220px;
+	height: 63px;
+	background: white;
+	left: -94px;
+	bottom: -60px;
+}
+
+.name2 { /* L vertical left */
+	position: absolute;
+	width: 80px;
+	height: 350px;
+	background: white;
+	left: -200px;
+	top: 154px;
+}
+
+/* E - 4 strokes */
+.name3 { /* E vertical left */
+	position: absolute;
+	width: 80px;
+	height: 350px;
+	background: white;
+	left: 102px;
+	top: 154px;
+}
+
+.name4 { /* E horizontal top */
+	position: absolute;
+	width: 260px;
+	height: 65px;
+	background: white;
+	left: 196px;
+	top: 11px;
+}
+
+.name5 { /* E horizontal middle */
+	position: absolute;
+	width: 240px;
+	height: 65px;
+	background: white;
+	left: 185px;
+	top: 151px;
+}
+
+.name6 { /* E horizontal bottom */
+	position: absolute;
+	width: 270px;
+	height: 65px;
+	background: white;
+	left: 200px;
+	bottom: -61px;
+}
+
+/* O - letter */
+.name7 { /* O as text */
+	position: absolute;
+	font-size: 500px;
+	font-weight: bolder;
+	color: white;
+	font-family: 'Montserrat', sans-serif;
+	left: 566px;
+	top: 50%;
+	transform: translateY(-50%);
+	line-height: 1;
+}
+
+/* N - 3 strokes */
+.name8 {
+	position: absolute;
+	width: 80px;
+	height: 350px;
+	background: white;
+	left: 858px;
+	top: 155px;
+}
+
+.name9 { /* N diagonal */
+	position: absolute;
+	width: 77px;
+	height: 387px;
+	background: white;
+	left: 865px;
+	top: 222px;
+	transform: rotate(20deg);
+	transform-origin: top left;
+}
+
+.name10 {
+	position: absolute;
+	width: 80px;
+	height: 350px;
+	background: white;
+	left: 1100px;
+	top: 155px;
+}
+
+.mask {
+	position: absolute;
+	background: black;
+	width: 15px;
+	height: 20px;
+	z-index: 10;
+}
+
+/* Shadow layer colors */
+.name-shadow1 .name1, .name-shadow1 .name2, .name-shadow1 .name3,
+.name-shadow1 .name4, .name-shadow1 .name5, .name-shadow1 .name6,
+.name-shadow1 .name8, .name-shadow1 .name9, .name-shadow1 .name10 {
+	background: #6065eb;
+}
+.name-shadow1 .name7 {
+	color: #6065eb;
+}
+
+.name-shadow2 .name1, .name-shadow2 .name2, .name-shadow2 .name3,
+.name-shadow2 .name4, .name-shadow2 .name5, .name-shadow2 .name6,
+.name-shadow2 .name8, .name-shadow2 .name9, .name-shadow2 .name10 {
+	background: #454cc0;
+}
+.name-shadow2 .name7 {
+	color: #454cc0;
+}
+
+
+.TEMPLATE {
+	font-size: 500px;
+	font-weight: bolder;
+	color: red;
+	font-family: 'Montserrat', sans-serif;
+}
