@@ -50,7 +50,7 @@ export class TimelineCanvas extends HTMLElement {
 			child.style.transform = 'translate(-50%, -50%)';
 		}
 
-		this.resize();
+		requestAnimationFrame(() => this.resize());
 		window.addEventListener('resize', () => this.resize());
 		this.addEventListener('click', this.handleClick);
 	}

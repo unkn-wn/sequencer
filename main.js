@@ -287,3 +287,7 @@ timeline.hide(1750 + 1250/2);
 
 
 timeline.play();
+
+setTimeout(() => {
+	document.querySelectorAll('.portfolio-video').forEach(video => video.play());
+}, 2000);
