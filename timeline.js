@@ -10,7 +10,7 @@ function createController(animations) {
 		initialStates: new Map(),
 		currentTime: 0,
 		isPlaying: false,
-		duration: 0,
+		duration: 1,
 		fixedDuration: null,
 		ease: ease,
 		_startTimestamp: 0,
@@ -191,7 +191,7 @@ export class Timeline {
 
 	anim(target) {
 		let startTime = 0;
-		let duration = 0;
+		let duration = 1;
 		let spline = ease.linear;
 		let type = [];
 
@@ -202,7 +202,7 @@ export class Timeline {
 			at(time) {
 				startTime = time;
 				spline = ease.linear;
-				duration = 0;
+				duration = 1;
 				type = [];
 				return this;
 			},
@@ -233,7 +233,7 @@ export class Timeline {
 			then() {
 				startTime += duration;
 				spline = ease.linear;
-				duration = 0;
+				duration = 1;
 				type = [];
 				return this;
 			},
@@ -249,7 +249,7 @@ export class Timeline {
 							startValue: props.x,
 							endValue: props.x,
 							startTime: startTime,
-							duration: 0,
+							duration: 1,
 						});
 					if (props.y !== undefined)
 						timeline.animations.push({
@@ -258,7 +258,7 @@ export class Timeline {
 							startValue: props.y,
 							endValue: props.y,
 							startTime: startTime,
-							duration: 0,
+							duration: 1,
 						});
 					if (props.scale !== undefined)
 						timeline.animations.push({
@@ -267,7 +267,7 @@ export class Timeline {
 							startValue: props.scale,
 							endValue: props.scale,
 							startTime: startTime,
-							duration: 0,
+							duration: 1,
 						});
 					if (props.rotate !== undefined)
 						timeline.animations.push({
@@ -276,7 +276,7 @@ export class Timeline {
 							startValue: props.rotate,
 							endValue: props.rotate,
 							startTime: startTime,
-							duration: 0,
+							duration: 1,
 						});
 					if (props.opacity !== undefined)
 						timeline.animations.push({
@@ -285,7 +285,7 @@ export class Timeline {
 							startValue: props.opacity,
 							endValue: props.opacity,
 							startTime: startTime,
-							duration: 0,
+							duration: 1,
 						});
 					return this;
 				}
@@ -296,7 +296,7 @@ export class Timeline {
 					startValue: x,
 					endValue: x,
 					startTime: startTime,
-					duration: 0,
+					duration: 1,
 				});
 				timeline.animations.push({
 					target: target,
@@ -304,7 +304,7 @@ export class Timeline {
 					startValue: y,
 					endValue: y,
 					startTime: startTime,
-					duration: 0,
+					duration: 1,
 				});
 				return this;
 			},
@@ -318,7 +318,7 @@ export class Timeline {
 						startValue: val,
 						endValue: val,
 						startTime: startTime,
-						duration: 0,
+						duration: 1,
 					});
 				}
 				return this;
@@ -395,10 +395,10 @@ export class Timeline {
 				timeline.animations.push({
 					target: target,
 					type: 'opacity',
-					startValue: null,
+					startValue: 1,
 					endValue: 0,
 					startTime: startTime,
-					duration: 0,
+					duration: 1,
 				});
 				return this;
 			},
@@ -408,10 +408,10 @@ export class Timeline {
 				timeline.animations.push({
 					target: target,
 					type: 'opacity',
-					startValue: null,
+					startValue: 0,
 					endValue: 1,
 					startTime: startTime,
-					duration: 0,
+					duration: 1,
 				});
 				return this;
 			},
@@ -454,7 +454,7 @@ export class Timeline {
 					startValue: color,
 					endValue: color,
 					startTime: startTime,
-					duration: 0,
+					duration: 1,
 				});
 				return this;
 			},
@@ -505,7 +505,7 @@ export class Timeline {
 					target: audio,
 					type: 'audioStart',
 					startTime: startTime,
-					duration: 0,
+					duration: 1,
 				});
 
 				if (duration > 0) {
@@ -513,7 +513,7 @@ export class Timeline {
 						target: audio,
 						type: 'audioStop',
 						startTime: startTime + duration,
-						duration: 0,
+						duration: 1,
 					});
 				}
 				return this;
@@ -524,7 +524,7 @@ export class Timeline {
 					target: audio,
 					type: 'audioStop',
 					startTime: startTime,
-					duration: 0,
+					duration: 1,
 				});
 				return this;
 			},

@@ -132,9 +132,9 @@ timeline.anim(charM).at(1).hide();
 		.hide();
 });
 
-timeline.anim(charI).at(600).show();
-timeline.anim(charApos).at(700).show();
-timeline.anim(charM).at(800).show();
+timeline.anim(charI).at(600).show().at(750).hide().at(900).show();
+timeline.anim(charApos).at(650).show().at(800).hide().at(950).show();
+timeline.anim(charM).at(700).show().at(850).hide().at(1000).show();
 
 // color?
 timeline.anim(IAM)
@@ -289,4 +289,4 @@ const mainWebsite = document.querySelector('#MAIN-WEBSITE');
 mainWebsite.style.visibility = 'hidden';
 setTimeout(() => {
     mainWebsite.style.visibility = 'visible';
-}, 1750 + 1250/2 + 10);
+}, 1750 + 1250/2 + 15);
