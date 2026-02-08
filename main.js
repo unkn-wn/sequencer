@@ -289,5 +289,12 @@ timeline.hide(1750 + 1250/2);
 timeline.play();
 
 setTimeout(() => {
-	document.querySelectorAll('.portfolio-video').forEach(video => video.play());
+	document.querySelectorAll('.portfolio-video').forEach(video => {
+		const source = video.querySelector('source');
+		if (source && source.dataset.src) {
+			source.src = source.dataset.src;
+			video.load();
+			video.play();
+		}
+	});
 }, 2000);

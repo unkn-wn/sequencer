@@ -99,8 +99,9 @@ export function applyState(element, state) {
 	if (element.tagName === 'TIMELINE-CANVAS') {
 		element.style.backgroundColor = `rgba(${state.color.r}, ${state.color.g}, ${state.color.b}, ${state.color.a})`;
 		const curScale = element.scale || 1;
-		const css = `translate(-50%, -50%) translateX(${state.x}px) translateY(${state.y}px) scale(${curScale}) opacity(${state.opacity})`;
+		const css = `translate(-50%, -50%) translateX(${state.x}px) translateY(${state.y}px) scale(${curScale})`;
 		element.style.transform = css;
+		element.style.opacity = state.opacity;
 		return;
 	}
 
