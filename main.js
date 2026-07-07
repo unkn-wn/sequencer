@@ -288,13 +288,12 @@ timeline.hide(1750 + 1250/2);
 
 timeline.play();
 
-setTimeout(() => {
-	document.querySelectorAll('.portfolio-video').forEach(video => {
-		const source = video.querySelector('source');
-		if (source && source.dataset.src) {
-			source.src = source.dataset.src;
-			video.load();
-			video.play();
-		}
-	});
-}, 2000);
+// Load videos immediately so they preload in the background during the JS intro animation
+document.querySelectorAll('.portfolio-video').forEach(video => {
+	const source = video.querySelector('source');
+	if (source && source.dataset.src) {
+		source.src = source.dataset.src;
+		video.load();
+		video.play();
+	}
+});
