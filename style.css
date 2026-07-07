@@ -211,6 +211,10 @@ body {
 	font-family: 'Montserrat', sans-serif;
 }
 
+timeline-canvas:not(:defined) {
+	opacity: 0;
+}
+
 /* Video Wrapper for Skeleton Loader */
 .video-wrapper {
 	position: relative;

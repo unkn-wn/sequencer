@@ -1,5 +1,5 @@
 import { Animation, animationLoop, ease, getState, applyState, setState, bezierEase, parseColor, mapping } from './animation.js';
-import { Path } from './path.js';
+// import { Path } from './path.js';
 
 requestAnimationFrame(animationLoop);
 
@@ -61,12 +61,7 @@ function createController(animations) {
 				});
 			};
 
-			// If page is still loading, wait for load event
-			if (document.readyState !== 'complete') {
-				window.addEventListener('load', waitForReady, { once: true });
-			} else {
-				waitForReady();
-			}
+			waitForReady();
 		},
 
 		_startPlayback() {

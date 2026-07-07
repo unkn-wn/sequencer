@@ -1,8 +1,8 @@
 import { Timeline } from './timeline.js';
 import { ease } from './animation.js';
 import { TimelineCanvas } from './timelinecanvas.js';
-import { injectEditor } from './editor/index.js';
-import { Path } from './path.js';
+// import { injectEditor } from './editor/index.js';
+// import { Path } from './path.js';
 // injectEditor();
 
 const timeline = new Timeline();
@@ -347,11 +347,16 @@ async function loadVideosSequentially() {
 	}
 }
 
-// Start loading videos immediately in the background while the animation plays
-if (document.readyState === 'complete') {
-	loadVideosSequentially();
-} else {
-	window.addEventListener('load', loadVideosSequentially, { once: true });
-}
+// Start loading videos in the background the moment the animation starts playing on screen
+Promise.all([
+	document.fonts.ready,
+	customElements.whenDefined('timeline-canvas')
+]).then(() => {
+	requestAnimationFrame(() => {
+		requestAnimationFrame(() => {
+			loadVideosSequentially();
+		});
+	});
+});
 
 
