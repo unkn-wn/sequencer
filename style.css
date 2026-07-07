@@ -210,3 +210,32 @@ body {
 	color: red;
 	font-family: 'Montserrat', sans-serif;
 }
+
+/* Portfolio Video Grid Proportional Layout */
+.portfolio-video {
+	width: 100% !important;
+	height: auto !important;
+}
+
+.portfolio-row-1-vid-1 {
+	flex: 2.39 1 0%;
+}
+.portfolio-row-1-vid-2 {
+	flex: 1.777 1 0%;
+}
+.portfolio-row-2-vid-1 {
+	flex: 1 1 0%;
+}
+.portfolio-row-2-vid-2,
+.portfolio-row-2-vid-3 {
+	flex: 1.777 1 0%;
+}
+
+@media (min-width: 768px) {
+	.portfolio-col-1 {
+		flex: 4.554 1 0%;
+	}
+	.portfolio-col-2 {
+		flex: 3.554 1 0%;
+	}
+}
