@@ -211,11 +211,46 @@ body {
 	font-family: 'Montserrat', sans-serif;
 }
 
+/* Video Wrapper for Skeleton Loader */
+.video-wrapper {
+	position: relative;
+	display: block;
+	background-color: #070a13;
+	overflow: hidden;
+}
+
+.video-wrapper.skeleton-loading {
+	background: linear-gradient(
+		90deg,
+		#070a13 25%,
+		#111625 50%,
+		#070a13 75%
+	);
+	background-size: 200% 100%;
+	animation: skeleton-pulse 1.8s infinite linear;
+}
+
+@keyframes skeleton-pulse {
+	0% {
+		background-position: -200% 0;
+	}
+	100% {
+		background-position: 200% 0;
+	}
+}
+
 /* Portfolio Video Grid Proportional Layout */
 .portfolio-video {
 	width: 100% !important;
 	height: auto !important;
+	opacity: 0;
+	transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+.portfolio-video.loaded {
+	opacity: 1;
+}
+
 
 @media (min-width: 768px) {
 	.portfolio-row-1-vid-1 {

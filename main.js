@@ -286,14 +286,72 @@ timeline.anim(websiteCover).at(1750 + 1250/2).hide();
 timeline.hide(1750 + 1250/2);
 
 
-timeline.play();
+const controller = timeline.play();
 
-// Load videos immediately so they preload in the background during the JS intro animation
-document.querySelectorAll('.portfolio-video').forEach(video => {
-	const source = video.querySelector('source');
-	if (source && source.dataset.src) {
+// Helper to load a single video and return a promise when it has loaded the first frame
+function loadVideo(video) {
+	return new Promise((resolve) => {
+		const source = video.querySelector('source');
+		if (!source || !source.dataset.src) {
+			resolve();
+			return;
+		}
+
+		// Set actual video source to start fetching
 		source.src = source.dataset.src;
 		video.load();
-		video.play();
+
+		let resolved = false;
+		const onVideoLoad = () => {
+			if (resolved) return;
+			resolved = true;
+
+			// Fade in video and resolve skeleton loader
+			video.classList.add('loaded');
+			const wrapper = video.closest('.video-wrapper');
+			if (wrapper) {
+				wrapper.classList.remove('skeleton-loading');
+			}
+			resolve();
+		};
+
+		// Listen to HTML5 video load events to proceed to next video
+		video.addEventListener('loadeddata', onVideoLoad);
+		video.addEventListener('playing', onVideoLoad);
+		video.addEventListener('canplay', onVideoLoad);
+
+		// Trigger autoplay play
+		video.play().catch(err => {
+			console.warn('Playback request was interrupted or failed:', err);
+		});
+
+		// 2.5s fallback timeout to prevent slow network from freezing the queue
+		setTimeout(onVideoLoad, 2500);
+	});
+}
+
+// Sequentially load all portfolio videos starting from the top of the viewport
+async function loadVideosSequentially() {
+	const videos = Array.from(document.querySelectorAll('.portfolio-video'));
+	
+	// Sort videos dynamically by their vertical position in the viewport
+	videos.sort((a, b) => {
+		const rectA = a.getBoundingClientRect();
+		const rectB = b.getBoundingClientRect();
+		return rectA.top - rectB.top;
+	});
+
+	// Load one video after another
+	for (const video of videos) {
+		await loadVideo(video);
 	}
-});
+}
+
+// Start loading videos immediately in the background while the animation plays
+if (document.readyState === 'complete') {
+	loadVideosSequentially();
+} else {
+	window.addEventListener('load', loadVideosSequentially, { once: true });
+}
+
+
