@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Projects</title>
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+	<style>
+		body {
+			background-color: #02040a;
+			font-family: 'Montserrat', sans-serif;
+			color: #ffffff;
+		}
+	</style>
+</head>
+<body class="min-h-screen flex flex-col justify-center items-center px-6 py-12 md:py-24 selection:bg-white/10">
+	<div class="w-full max-w-xl flex flex-col gap-16">
+		<!-- Header/Back link -->
+		<a href="index.html" class="text-white/40 hover:text-white text-sm font-light tracking-wide self-start transition-colors duration-200">
+			← back
+		</a>
+
+		<!-- Projects list -->
+		<div class="flex flex-col gap-12">
+			<!-- Project 1 -->
+			<div class="flex flex-col gap-2">
+				<a href="https://remi.social" target="_blank" class="text-white hover:text-white/80 text-xl font-medium tracking-wide transition-colors self-start">
+					remi.social
+				</a>
+				<p class="text-white/50 text-sm font-light leading-relaxed">
+					A social cooking app—like Strava, but for cooking. Track recipes, log meals, and share culinary updates.
+				</p>
+			</div>
+
+			<!-- Project 2 -->
+			<div class="flex flex-col gap-2">
+				<a href="https://motia.graphics" target="_blank" class="text-white hover:text-white/80 text-xl font-medium tracking-wide transition-colors self-start">
+					motia.graphics
+				</a>
+				<p class="text-white/50 text-sm font-light leading-relaxed">
+					An audio-waveform storyboarding web application built to streamline video and motion graphics editing workflows.
+				</p>
+			</div>
+
+			<!-- Project 3 -->
+			<div class="flex flex-col gap-2">
+				<a href="https://boilerclasses.com" target="_blank" class="text-white hover:text-white/80 text-xl font-medium tracking-wide transition-colors self-start">
+					boilerclasses.com
+				</a>
+				<p class="text-white/50 text-sm font-light leading-relaxed">
+					A student-designed, open-source course search engine and planning catalog for Purdue University students.
+				</p>
+			</div>
+		</div>
+	</div>
+	<script>
+		// Signal to index.html that the user is coming back from projects.html
+		sessionStorage.setItem('comingFromProjects', 'true');
+	</script>
+</body>
+</html>

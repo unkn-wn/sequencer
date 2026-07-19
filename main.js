@@ -285,8 +285,18 @@ timeline.anim(websiteCover).at(1).show();
 timeline.anim(websiteCover).at(1750 + 1250/2).hide();
 timeline.hide(1750 + 1250/2);
 
-
-const controller = timeline.play();
+const skipIntro = sessionStorage.getItem('comingFromProjects') === 'true';
+sessionStorage.removeItem('comingFromProjects');
+if (skipIntro) {
+	const canvas = document.querySelector('timeline-canvas');
+	if (canvas) canvas.style.display = 'none';
+	const blackOverlay = document.querySelector('#black-overlay');
+	if (blackOverlay) blackOverlay.style.display = 'none';
+	const websiteCover = document.querySelector('#website-cover');
+	if (websiteCover) websiteCover.style.display = 'none';
+} else {
+	const controller = timeline.play();
+}
 
 // Helper to load a single video and return a promise when it has loaded the first frame
 function loadVideo(video) {
